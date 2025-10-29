@@ -23,3 +23,80 @@
 2025-10-28T17:41:34Z INFO It took 2.4049251079559326 seconds to write to sheets 
 2025-10-28T17:41:34Z INFO It took, 8.74483871459961 seconds to run the whole program
 2025-10-28T17:41:34Z INFO Program execution ended
+2025-10-28T17:48:46Z INFO Starting Underpin Notification
+2025-10-28T17:48:47Z INFO Reading customers from: customers.json
+2025-10-28T17:48:47Z INFO Loaded customer info from customers.json
+2025-10-28T17:48:47Z INFO Created customer list of 4 customers
+2025-10-28T17:48:47Z INFO Created dictionary of product keys with customer values for 6 products
+2025-10-28T17:48:47Z INFO Reading products from: products.json
+2025-10-28T17:48:47Z INFO Loaded product data for 6 products
+2025-10-28T17:48:47Z INFO Fetching sales for Machine ID: 567219276
+2025-10-28T17:48:47Z INFO Fetching sales for Machine ID: 791321280
+2025-10-28T17:48:47Z INFO 10 sales from yesterday
+2025-10-28T17:48:47Z INFO Grouped sales for 3 customers
+2025-10-28T17:48:47Z INFO Reading email_template from: email-template.json
+2025-10-28T17:48:48Z INFO Connection success to GMAIL SMTP
+2025-10-28T17:48:48Z INFO Email sent successfully to  Customer1 at azoladswe+test1@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:48:49Z INFO Email sent successfully to  Customer2 at azoladswe+test2@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:48:50Z INFO Email sent successfully to  Customer4 at azoladswe+test4@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:48:50Z INFO Notifications sent: 3 successful. 0 failed
+2025-10-28T17:48:50Z INFO It took 3.1408259868621826 seconds to send notifications
+2025-10-28T17:48:51Z INFO It took 0.7554869651794434 seconds to connect to sheets
+2025-10-28T17:48:51Z INFO Wrote to Notification Sheet
+2025-10-28T17:48:52Z INFO Wrote to Itemized Receipt Sheet
+2025-10-28T17:48:53Z INFO Wrote to Transaction Log Sheet
+2025-10-28T17:48:53Z INFO It took 1.7845849990844727 seconds to write to sheets 
+2025-10-28T17:48:53Z INFO It took, 6.659837961196899 seconds to run the whole program
+2025-10-28T17:48:53Z INFO Program execution ended
+2025-10-28T17:51:28Z INFO Notification cron job triggered
+2025-10-28T17:51:28Z INFO Starting Underpin Notification
+2025-10-28T17:51:29Z INFO Reading customers from: customers.json
+2025-10-28T17:51:29Z INFO Loaded customer info from customers.json
+2025-10-28T17:51:29Z INFO Created customer list of 4 customers
+2025-10-28T17:51:29Z INFO Created dictionary of product keys with customer values for 6 products
+2025-10-28T17:51:29Z INFO Reading products from: products.json
+2025-10-28T17:51:29Z INFO Loaded product data for 6 products
+2025-10-28T17:51:29Z INFO Fetching sales for Machine ID: 567219276
+2025-10-28T17:51:29Z INFO Fetching sales for Machine ID: 791321280
+2025-10-28T17:51:29Z INFO 10 sales from yesterday
+2025-10-28T17:51:29Z INFO Grouped sales for 3 customers
+2025-10-28T17:51:29Z INFO Reading email_template from: email-template.json
+2025-10-28T17:51:29Z INFO Connection success to GMAIL SMTP
+2025-10-28T17:51:30Z INFO Email sent successfully to  Customer1 at azoladswe+test1@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:51:31Z INFO Email sent successfully to  Customer2 at azoladswe+test2@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:51:32Z INFO Email sent successfully to  Customer4 at azoladswe+test4@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:51:32Z INFO Notifications sent: 3 successful. 0 failed
+2025-10-28T17:51:32Z INFO It took 2.9528331756591797 seconds to send notifications
+2025-10-28T17:51:33Z INFO It took 0.7703521251678467 seconds to connect to sheets
+2025-10-28T17:51:33Z INFO Wrote to Notification Sheet
+2025-10-28T17:51:33Z INFO Wrote to Itemized Receipt Sheet
+2025-10-28T17:51:33Z INFO Wrote to Transaction Log Sheet
+2025-10-28T17:51:33Z INFO It took 0.7344870567321777 seconds to write to sheets 
+2025-10-28T17:51:33Z INFO It took, 5.424026012420654 seconds to run the whole program
+2025-10-28T17:51:33Z INFO Program execution ended
+2025-10-28T17:52:23Z INFO Notification cron job triggered
+2025-10-28T17:52:23Z INFO Starting Underpin Notification
+2025-10-28T17:52:24Z INFO Reading customers from: customers.json
+2025-10-28T17:52:24Z INFO Loaded customer info from customers.json
+2025-10-28T17:52:24Z INFO Created customer list of 4 customers
+2025-10-28T17:52:24Z INFO Created dictionary of product keys with customer values for 6 products
+2025-10-28T17:52:24Z INFO Reading products from: products.json
+2025-10-28T17:52:24Z INFO Loaded product data for 6 products
+2025-10-28T17:52:24Z INFO Fetching sales for Machine ID: 567219276
+2025-10-28T17:52:24Z INFO Fetching sales for Machine ID: 791321280
+2025-10-28T17:52:24Z INFO 10 sales from yesterday
+2025-10-28T17:52:24Z INFO Grouped sales for 3 customers
+2025-10-28T17:52:24Z INFO Reading email_template from: email-template.json
+2025-10-28T17:52:25Z INFO Connection success to GMAIL SMTP
+2025-10-28T17:52:26Z INFO Email sent successfully to  Customer1 at azoladswe+test1@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:52:26Z INFO Email sent successfully to  Customer2 at azoladswe+test2@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:52:27Z INFO Email sent successfully to  Customer4 at azoladswe+test4@gmail.com and azoladswe+main@gmail.com 
+2025-10-28T17:52:27Z INFO Notifications sent: 3 successful. 0 failed
+2025-10-28T17:52:27Z INFO It took 3.3697569370269775 seconds to send notifications
+2025-10-28T17:52:28Z INFO It took 0.8963820934295654 seconds to connect to sheets
+2025-10-28T17:52:29Z INFO Wrote to Notification Sheet
+2025-10-28T17:52:29Z INFO Wrote to Itemized Receipt Sheet
+2025-10-28T17:52:29Z INFO Wrote to Transaction Log Sheet
+2025-10-28T17:52:29Z INFO It took 0.8275420665740967 seconds to write to sheets 
+2025-10-28T17:52:29Z INFO It took, 6.021191835403442 seconds to run the whole program
+2025-10-28T17:52:29Z INFO Program execution ended

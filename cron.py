@@ -2,6 +2,7 @@ try:
     from flask import Flask, request
     from main import main as run_notifications
     from logger import setup_logging
+
 except Exception as e:
     print(f"Failed to import within cron.py: {str(e)}")
 
