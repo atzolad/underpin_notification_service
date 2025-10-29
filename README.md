@@ -73,6 +73,12 @@ gcloud run deploy {service_name} \
     --max-instances 1 \
     --port 8080 # Cloud Run requires a port, though this script won't use it
 
+
+  
+-------------------------------------------------------------------------------------  
+
+Need to add the environmental variables within the Google Cloud project. On the Cloud Console go to Cloud Run- click on the correct service. Click Edit and deploy new revision -> Variables and Secrets -> can add environmental variables there. Pasting the copied list from .env will populate them all.
+
 # Create the scheduler job
 gcloud scheduler jobs create http {scheduler_job_name} \
     --schedule="0 8 * * *" \
