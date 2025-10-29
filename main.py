@@ -1,0 +1,124 @@
+from utils.sales import get_last_sales,get_daily_sales, group_sales_by_customer
+from utils.customers import load_customers, create_customer_list, get_customer_to_product_map
+from utils.products import load_product_costs
+from utils.notifications import create_notifications, send_notifications
+from utils.config import customer_file, product_file, machine_ids
+from utils.sheets import connect_sheets, write_to_sheet
+import time
+from logger import setup_logging
+import os
+from google.cloud import storage
+
+def main():
+
+    # Calculate the start time
+    start2 = time.time()
+
+    logger = setup_logging(__name__)
+
+    logger.info("Starting Underpin Notification")
+
+    # Use an environment variable to define the bucket name for Google Cloud Storage
+    BUCKET_NAME = os.environ.get("CONFIG_BUCKET") 
+
+    try:
+
+        #Initialize the storage client and bucket for Google Cloud- will be used for both load_customers and load_products
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(BUCKET_NAME)
+
+        #Load customer and product info from files.
+        customer_data = load_customers(bucket, customer_file)
+        logger.info(f"Loaded customer info from {customer_file}")
+        customers = create_customer_list(customer_data)
+        logger.info(f"Created customer list of {len(customers)} customers")
+        customer_product_dict = get_customer_to_product_map(customers)
+        logger.info(f"Created dictionary of product keys with customer values for {len(customer_product_dict)} products")
+        product_costs = load_product_costs(bucket, product_file)
+        logger.info(f"Loaded product data for {len(product_costs)} products")
+
+    except Exception as e:
+        logger.error(f"Error loading customer and product info from files: {e}", exc_info=True)
+    
+    #Initialize a list to store the combination of last sales from all machines.
+    all_machine_last_sales = []
+    
+    #Loop through each machine in the list and add the last sales together. 
+    for machine_id in machine_ids:
+        logger.info(f"Fetching sales for Machine ID: {machine_id}")
+        try:
+            machine_sales = get_last_sales(machine_id)
+            all_machine_last_sales.extend(machine_sales)
+        except Exception as e:
+            logger.error(f"Error fetching sales for {machine_id}: {str(e)}")
+    #print(f"ALL MACHINE SALES: {all_machine_last_sales}")
+
+    #Go through the last sales and find all sales from yesterday. End execution if not found. 
+    daily_sales = get_daily_sales(all_machine_last_sales)
+
+    if not daily_sales:
+
+        logger.warning("No sales from yesterday. Ending program execution")
+        return 
+    
+    logger.info(f"{len(daily_sales)} sales from yesterday")
+
+    customer_sales_dict = group_sales_by_customer(daily_sales, customer_product_dict, product_costs)
+    logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
+    if len(customer_sales_dict) == 0:
+        logger.warning(f"Customer sales dictionary is empty")
+    # print(customer_sales_dict)
+
+    start3 = time.time()
+
+    messages, itemized_receipt_rows, sales_list = create_notifications(bucket, customer_sales_dict)
+    
+    notification_rows, notification_success, notification_fail = send_notifications(messages)
+    logger.info(f"Notifications sent: {notification_success} successful. {notification_fail} failed")
+    end3 = time.time()
+    notification_time = end3 - start3
+    logger.info(f"It took {notification_time} seconds to send notifications")
+    # print(itemized_receipt_rows)
+    # print(notification_rows)
+
+    # Calculate the start time
+    start = time.time()
+    try:
+
+     sheet = connect_sheets()
+
+    except Exception as e:
+        logger.error(f"Error connecting to sheets: {e}")
+
+    # Calculate the end time and time taken
+    end = time.time()
+    length = end - start
+     # Show the results : this can be altered however you like
+    logger.info(f"It took {length} seconds to connect to sheets")
+
+    start4 = time.time()
+    try:
+
+        write_to_sheet(sheet, 0, notification_rows)
+        logger.info(f"Wrote to Notification Sheet")
+        write_to_sheet(sheet, 1, itemized_receipt_rows)
+        logger.info(f"Wrote to Itemized Receipt Sheet")
+        write_to_sheet(sheet, 2, sales_list)
+        logger.info(f"Wrote to Transaction Log Sheet")
+
+    except Exception as e:
+        logger.error(f"Error writing to sheets: {str(e)}")
+
+    end4 = time.time()
+    length4 = end4-start4
+    logger.info(f"It took {length4} seconds to write to sheets ")
+    # Calculate the end time and time taken
+    end2 = time.time()
+    length2 = end2 - start2
+    logger.info(f"It took, {length2} seconds to run the whole program")
+    logger.info(f"Program execution ended")
+
+if __name__ == "__main__":
+    main()
+
+#$source venv/bin/activate

@@ -1,0 +1,8 @@
+{
+  "subject": "{customer_name} Daily Sales Report for {date} added",
+  "greeting": "Dear {customer_name}, added",
+  "header": "Here's your sales summary for {date}:\nadded",
+  "sign_off": "Thank you, addded",
+  "signature": "The Underpin Team added",
+  "total_revenue": "Your total revenue from yesterday's sales: added"
+}
