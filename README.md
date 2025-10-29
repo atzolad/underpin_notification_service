@@ -1,64 +1,56 @@
 # UnderPin_Notification
 Notifications for UnderPin Vending
 
+This is the Notification system for Underpin's Vending machines.
+
+This is designed to be triggered via Google Cloud Scheduler once a day at 8am. 
+
+This program hits the NAYAX api and retrieves a list of the last sales from each vending machine. It parses the list looking for the sales for the previous day, then builds a dictionary with customers as the key and a list of their sales as the value. Also builds a dictionary with products as the keys and customers as the values. 
+
+It uses these dictionaries to email a notification to each customer listing their sales from the previous day. Each customer gets one email while an email is also sent to the main notification address. Program utilizes GMAIL SMTP to send emails. 
+
+The program also creates multiple records in Google Sheets- one containing each notification that was sent, one containing a combined itemized receipt for each customers item including sales between multiple machines.  Program utilizes the GOOGLE SHEETS API to update sheets. 
+
+In order to trigger the notification send- the file cron.py includes a minimal Flask app creating an endpoint for Google Cloud Scheduler to hit. The Cloud Scheduler should hit the main url for the service notification in google cloud to trigger this. ie https://google_service_url.us-west2.run.app/
+
+Files for the main functions are stored in the utils directory. 
+Main.py is the main python file
+Cron.py is the file to execute for the Cloud Scheduler that will trigger main.py. In the dockerfile- use gunicorn to setup the HTTP server to serve the flask app and run cron.py: ex- CMD gunicorn --bind 0.0.0.0:$PORT cron:app
 
 
+DEPLOYMENT
 
-Deployment to Google Cloud:
+-Create a Dockerfile ex:
 
-Create the docker repo for cloud-run-source :
+#  Use a minimal Python base image
+FROM python:3.13-slim
 
-gcloud artifacts repositories create cloud-run-source-deploy \
-    --repository-format=docker \
-    --location=us-west2 \
-    --description="Docker repository for Cloud Run images" \
-    --project={project_name}
+# Set working directory inside the container. If app directory doesn't exist, it creates it. 
+WORKDIR /app
 
+# Copy requirements first (for caching)
+COPY requirements.txt .
 
-To build a new image from the updated code:
+#  Install dependencies (including Flask, which is in your cron.py)
+RUN pip install --no-cache-dir -r requirements.txt
 
-IMAGE_URL="us-west2-docker.pkg.dev/{project_name}/cloud-run-source-deploy/{project_name}-dashboard-image:latest"
+#  Copy all necessary code into the app directory in the container
 
-gcloud builds submit --tag $IMAGE_URL
+COPY . /app
 
-To Deploy:
+#  Expose port (Good practice, though not strictly necessary for Cloud Run)
+EXPOSE 8080
 
-gcloud run deploy {project_deployment_name} \
-    --image $IMAGE_URL \
-    --region us-west2 \
-    --project {project_name}
+#Set the flask environment so it doesn't setup the local development server
+ENV FLASK_ENV='production'
 
-
-To update the environmental variables- they can be updated in the Google Cloud Console. Go to Cloud Run -> Edit and deploy new revision. On the default containers tab click variables and secrets and change the parameters.
-
-This is the command to download the configuration settings from the Google Cloud Console. 
-gcloud run services describe {project_name} \
-    --region us-west2 \
-    --project {project_name} \
-    --format export > service.yaml
+# Run the Flask server named "app" with Gunicorn from the cron.py file
+CMD gunicorn --bind 0.0.0.0:$PORT cron:app
 
 
-If you want to apply YAML files to service:
+Make sure to include secrets or sensitive files in a .dockerignore
 
-gcloud run services replace service.yaml \
-    --service {service_name} \
-    --region us-west2 \
-    --project {project_name}
-
-
-To configure bucket:
-
-gsutil cp customers.json gs://[YOUR-CONFIG-BUCKET-NAME]/customers.json
-gsutil cp products.json gs://[YOUR-CONFIG-BUCKET-NAME]/products.json
-gsutil cp email-template.json gs://[YOUR-CONFIG-BUCKET-NAME]/email-template.json
-
-To run locally:
-
-gcloud auth application-default login
-
-Before running the app.py Flask dashboard.
-
-FOR CRON JOB DEPLOYMENT
+-------------------------------------------------------------------------------------
 
 # Build the image and tag it for your Google Cloud registry. F flag sets the specific file (since it is not just Dockerignore)
 docker build -f Dockerfile.cron -t gcr.io/{gcp-project_name}/{service_name}:latest .
@@ -69,7 +61,7 @@ gcloud auth configure-
 # Push the Docker Image
 docker push gcr.io/{gcp-project_name}/{service_name}:latest
 
-# Build for amd64/linux architecture and push in one command
+# Build for amd64/linux architecture and push in one command- gcp runs this architecture.
 docker buildx build -f Dockerfile.cron --platform linux/amd64 -t gcr.io/{gcp-project_name}/{service_name}:latest --push .
 
 # Deploy the service
@@ -89,8 +81,8 @@ gcloud scheduler jobs create http {scheduler_job_name} \
     --location=us-west2 \
     --oidc-service-account-email="underpin-sales-notification@underpin-notification.iam.gserviceaccount.com" \
     --oidc-token-audience="{service_url} no / at the end“
-    --time-zone="America/Los_Angeles" 
+    --time-zone="America/Los_Angeles"
 
 # Immediately run to test
 
-    gcloud scheduler jobs run {scheduler_jobname} --location=us-west2
+gcloud scheduler jobs run {scheduler_jobname} --location=us-west2

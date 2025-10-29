@@ -14,7 +14,7 @@ try:
 except Exception as e:
     print(f"Failed to startup Flask App or logger: {str(e)}")
 
-@app.route("/", methods=['POST', 'GET', 'OPTIONS'])
+@app.route("/", methods=['POST', 'GET'])
 def trigger_notifications():
     '''
     Endpoint for the cloud scheduler
