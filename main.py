@@ -26,7 +26,7 @@ from google.cloud import storage
 def main():
 
     # Calculate the start time
-    start2 = time.time()
+    program_start_time = time.time()
 
     logger = setup_logging(__name__)
 
@@ -44,12 +44,15 @@ def main():
         # Load customer and product info from files.
         customer_data = load_customers(bucket, customer_file)
         logger.info(f"Loaded customer info from {customer_file}")
+
         customers = create_customer_list(customer_data)
         logger.info(f"Created customer list of {len(customers)} customers")
+
         customer_product_dict = get_customer_to_product_map(customers)
         logger.info(
             f"Created dictionary of product keys with customer values for {len(customer_product_dict)} products"
         )
+
         product_costs = load_product_costs(bucket, product_file)
         logger.info(f"Loaded product data for {len(product_costs)} products")
 
@@ -73,11 +76,11 @@ def main():
     # Go through the last sales and find all sales from yesterday. End execution if not found.
     daily_sales = get_daily_sales(all_machine_last_sales)
 
+    # Send a notification to main address and end program execution if no sales found.
     if not daily_sales:
 
-        logger.warning("No sales from yesterday. Ending program execution")
+        logger.info("No sales from yesterday. Ending program execution")
         notification_rows = send_no_sales_notification()
-        print(notification_rows)
         try:
             sheet = connect_sheets()
 
@@ -101,9 +104,8 @@ def main():
     logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
     if len(customer_sales_dict) == 0:
         logger.warning(f"Customer sales dictionary is empty")
-    # print(customer_sales_dict)
 
-    start3 = time.time()
+    notification_start_time = time.time()
 
     messages, itemized_receipt_rows, sales_list = create_notifications(
         bucket, customer_sales_dict
@@ -115,14 +117,12 @@ def main():
     logger.info(
         f"Notifications sent: {notification_success} successful. {notification_fail} failed"
     )
-    end3 = time.time()
-    notification_time = end3 - start3
+    notification_end_time = time.time()
+    notification_time = notification_end_time - notification_start_time
     logger.info(f"It took {notification_time} seconds to send notifications")
-    # print(itemized_receipt_rows)
-    # print(notification_rows)
 
     # Calculate the start time
-    start = time.time()
+    connect_sheet_start = time.time()
     try:
 
         sheet = connect_sheets()
@@ -130,13 +130,11 @@ def main():
     except Exception as e:
         logger.error(f"Error connecting to sheets: {e}")
 
-    # Calculate the end time and time taken
-    end = time.time()
-    length = end - start
-    # Show the results : this can be altered however you like
-    logger.info(f"It took {length} seconds to connect to sheets")
+    connect_sheet_end = time.time()
+    connect_sheet_time = connect_sheet_end - connect_sheet_start
+    logger.info(f"It took {connect_sheet_time} seconds to connect to sheets")
 
-    start4 = time.time()
+    sheet_start_time = time.time()
     try:
 
         write_to_sheet(sheet, 0, notification_rows)
@@ -149,13 +147,13 @@ def main():
     except Exception as e:
         logger.error(f"Error writing to sheets: {str(e)}")
 
-    end4 = time.time()
-    length4 = end4 - start4
-    logger.info(f"It took {length4} seconds to write to sheets ")
-    # Calculate the end time and time taken
-    end2 = time.time()
-    length2 = end2 - start2
-    logger.info(f"It took, {length2} seconds to run the whole program")
+    sheet_end_time = time.time()
+    sheet_write_time = sheet_end_time - sheet_start_time
+    logger.info(f"It took {sheet_write_time} seconds to write to sheets ")
+
+    program_end_time = time.time()
+    program_run_time = program_end_time - program_start_time
+    logger.info(f"It took, {program_run_time} seconds to run the whole program")
     logger.info(f"Program execution ended")
 
 
