@@ -9,6 +9,7 @@ from logger import setup_logging
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from .config import machine_tz
+from utils.time import get_yesterdays_date
 import json
 
 logger = setup_logging(__name__)
@@ -58,6 +59,28 @@ def load_email_template(bucket, email_template):
         }
 
 
+def create_email_msg(sender_email, recipients, subject, body, html_body):
+    message = MIMEMultipart("alternative")
+    message["From"] = sender_email
+    message["To"] = ", ".join(recipients)
+    message["Subject"] = subject
+    message.attach(MIMEText(body, "plain"))
+    if html_body:
+        message.attach(MIMEText(html_body, "html"))
+    return message
+
+
+def create_email_obj(message, customer_sales, yesterdays_date, total_revenue, customer):
+    email_obj = Email(
+        message,
+        customer,
+        customer_sales,
+        yesterdays_date,
+        total_revenue,
+    )
+    return email_obj
+
+
 def create_notifications(bucket, customer_sales_dict: dict):
     """
     Takes a dictionary of customers: Sends a notification to each customer containing their sales as well as the value of those sales.
@@ -70,14 +93,7 @@ def create_notifications(bucket, customer_sales_dict: dict):
 
     """
 
-    # This should maybe change so that it uses the same day from the functions above so they are in once place if we decide to change the logic and use a different day than yesterday.
-
-    local_now = datetime.now(ZoneInfo(machine_tz))
-    todays_date = local_now.date()
-
-    yesterdays_date = (todays_date - timedelta(days=1)).strftime(
-        "%m-%d-%Y"
-    )  # Formats yesterdays date in the traditional mo/day/year format
+    yesterdays_date = get_yesterdays_date()
 
     sales_list = []
     sales_map = {}
@@ -250,21 +266,10 @@ def create_notifications(bucket, customer_sales_dict: dict):
         body += f"{sign_off}\n"
         body += signature
 
-        # Create email message
-        message = MIMEMultipart("alternative")
-        message["From"] = sender_email
-        message["To"] = ", ".join(recipients)
-        message["Subject"] = subject
-        message.attach(MIMEText(body, "plain"))
-        message.attach(MIMEText(html_body, "html"))
-
+        message = create_email_msg(sender_email, recipients, subject, body, html_body)
         messages.append(
-            Email(
-                message=message,
-                customer=customer,
-                customer_sales=customer_sales.copy(),
-                yesterdays_date=yesterdays_date,
-                total_revenue=total_revenue,
+            create_email_obj(
+                message, customer, customer_sales, yesterdays_date, total_revenue
             )
         )
 
@@ -274,7 +279,7 @@ def create_notifications(bucket, customer_sales_dict: dict):
 
 def send_notifications(messages: list):
     """
-    Accepts a list of message objects, connects to GOOGLE SMTP and sends an email containing each message to the customer.
+    Accepts a list of Email objects, connects to GOOGLE SMTP and sends an email containing each message to the customer.
 
     Args:
     messages (list): A list of MIMEMultipart message objects \n
@@ -303,9 +308,15 @@ def send_notifications(messages: list):
 
                 try:
                     server.send_message(message.message)
-                    logger.info(
-                        f"Email sent successfully to  {message.customer.name} at {message.customer.email} and {notification_address} "
-                    )
+                    if not message.customer:
+                        logger.info(
+                            f"Email sent successfully to {notification_address}"
+                        )
+                    else:
+
+                        logger.info(
+                            f"Email sent successfully to  {message.customer.name} at {message.customer.email} and {notification_address} "
+                        )
                     successfully_sent += 1
                     notification_status = "sent"
 
@@ -314,9 +325,12 @@ def send_notifications(messages: list):
                     )
 
                 except Exception as e:
-                    logger.info(
-                        f"Failed to send email to {message.customer.name}: {str(e)}"
-                    )
+                    if not message.customer:
+                        logger.error(f"Failed to send email to {notification_address}")
+                    else:
+                        logger.error(
+                            f"Failed to send email to {message.customer.name}: {str(e)}"
+                        )
                     failed_sends += 1
                     notification_status = "failed"
                     notification_rows = add_notification_row(
@@ -331,14 +345,43 @@ def send_notifications(messages: list):
 
 
 def add_notification_row(notification_rows, message, notification_status):
-    notification_rows.append(
-        [
-            message.yesterdays_date,
-            message.customer.name,
-            message.customer.email,
-            ", ".join(message.customer_sales),
-            message.total_revenue,
-            notification_status,
-        ]
-    )
+    if message.customer:
+        notification_rows.append(
+            [
+                message.yesterdays_date,
+                message.customer.name,
+                message.customer.email,
+                ", ".join(message.customer_sales),
+                message.total_revenue,
+                notification_status,
+            ]
+        )
+    else:
+        notification_rows.append(
+            [
+                message.yesterdays_date,
+                "Main Notification Address",
+                notification_address,
+                [],
+                0,
+                notification_status,
+            ]
+        )
+
     return notification_rows
+
+
+def send_no_sales_notification():
+
+    yesterdays_date = get_yesterdays_date()
+    message = create_email_msg(
+        sender_email,
+        [notification_address],
+        f"Daily Sales Notification Report {yesterdays_date}",
+        f"Sales-Notification service completed successfully- No sales from {yesterdays_date}",
+        None,
+    )
+    send_notifications(
+        [create_email_obj(message, [], yesterdays_date, 0, customer=None)]
+    )
+    return

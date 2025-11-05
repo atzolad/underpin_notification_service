@@ -100,3 +100,141 @@
 2025-10-28T17:52:29Z INFO It took 0.8275420665740967 seconds to write to sheets 
 2025-10-28T17:52:29Z INFO It took, 6.021191835403442 seconds to run the whole program
 2025-10-28T17:52:29Z INFO Program execution ended
+2025-11-05T12:28:08Z INFO Starting Underpin Notification
+2025-11-05T12:28:09Z INFO Reading customers from: customers.json
+2025-11-05T12:28:10Z INFO Loaded customer info from customers.json
+2025-11-05T12:28:10Z INFO Created customer list of 5 customers
+2025-11-05T12:28:10Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:28:10Z INFO Reading products from: products.json
+2025-11-05T12:28:10Z INFO Loaded product data for 6 products
+2025-11-05T12:28:10Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:28:10Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:28:10Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:28:41Z INFO Starting Underpin Notification
+2025-11-05T12:28:42Z INFO Reading customers from: customers.json
+2025-11-05T12:28:42Z INFO Loaded customer info from customers.json
+2025-11-05T12:28:42Z INFO Created customer list of 5 customers
+2025-11-05T12:28:42Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:28:42Z INFO Reading products from: products.json
+2025-11-05T12:28:42Z INFO Loaded product data for 6 products
+2025-11-05T12:28:42Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:28:42Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:28:42Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:28:43Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:28:43Z ERROR Failed to connect to gmail service: 'NoneType' object has no attribute 'customer'
+2025-11-05T12:30:48Z INFO Starting Underpin Notification
+2025-11-05T12:30:48Z INFO Reading customers from: customers.json
+2025-11-05T12:30:49Z INFO Loaded customer info from customers.json
+2025-11-05T12:30:49Z INFO Created customer list of 5 customers
+2025-11-05T12:30:49Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:30:49Z INFO Reading products from: products.json
+2025-11-05T12:30:49Z INFO Loaded product data for 6 products
+2025-11-05T12:30:49Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:30:49Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:30:49Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:31:14Z INFO Starting Underpin Notification
+2025-11-05T12:31:15Z INFO Reading customers from: customers.json
+2025-11-05T12:31:15Z INFO Loaded customer info from customers.json
+2025-11-05T12:31:15Z INFO Created customer list of 5 customers
+2025-11-05T12:31:15Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:31:15Z INFO Reading products from: products.json
+2025-11-05T12:31:15Z INFO Loaded product data for 6 products
+2025-11-05T12:31:15Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:31:15Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:31:15Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:31:16Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:31:16Z ERROR Failed to connect to gmail service: 'NoneType' object has no attribute 'customer'
+2025-11-05T12:34:05Z INFO Starting Underpin Notification
+2025-11-05T12:34:06Z INFO Reading customers from: customers.json
+2025-11-05T12:34:06Z INFO Loaded customer info from customers.json
+2025-11-05T12:34:06Z INFO Created customer list of 5 customers
+2025-11-05T12:34:06Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:34:06Z INFO Reading products from: products.json
+2025-11-05T12:34:06Z INFO Loaded product data for 6 products
+2025-11-05T12:34:06Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:34:06Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:34:06Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:34:07Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:34:07Z ERROR Failed to connect to gmail service: type object 'Email' has no attribute 'customer'
+2025-11-05T12:36:36Z INFO Starting Underpin Notification
+2025-11-05T12:36:36Z INFO Reading customers from: customers.json
+2025-11-05T12:36:36Z INFO Loaded customer info from customers.json
+2025-11-05T12:36:36Z INFO Created customer list of 5 customers
+2025-11-05T12:36:36Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:36:36Z INFO Reading products from: products.json
+2025-11-05T12:36:37Z INFO Loaded product data for 6 products
+2025-11-05T12:36:37Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:36:37Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:36:37Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:36:37Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:36:37Z ERROR Failed to connect to gmail service: type object 'Email' has no attribute 'customer'
+2025-11-05T12:37:13Z INFO Starting Underpin Notification
+2025-11-05T12:37:13Z INFO Reading customers from: customers.json
+2025-11-05T12:37:14Z INFO Loaded customer info from customers.json
+2025-11-05T12:37:14Z INFO Created customer list of 5 customers
+2025-11-05T12:37:14Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:37:14Z INFO Reading products from: products.json
+2025-11-05T12:37:14Z INFO Loaded product data for 6 products
+2025-11-05T12:37:14Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:37:14Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:37:14Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:37:59Z INFO Starting Underpin Notification
+2025-11-05T12:37:59Z INFO Reading customers from: customers.json
+2025-11-05T12:38:00Z INFO Loaded customer info from customers.json
+2025-11-05T12:38:00Z INFO Created customer list of 5 customers
+2025-11-05T12:38:00Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:38:00Z INFO Reading products from: products.json
+2025-11-05T12:38:00Z INFO Loaded product data for 6 products
+2025-11-05T12:38:00Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:38:00Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:38:00Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:39:01Z INFO Starting Underpin Notification
+2025-11-05T12:39:02Z INFO Reading customers from: customers.json
+2025-11-05T12:39:02Z INFO Loaded customer info from customers.json
+2025-11-05T12:39:02Z INFO Created customer list of 5 customers
+2025-11-05T12:39:02Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:39:02Z INFO Reading products from: products.json
+2025-11-05T12:39:02Z INFO Loaded product data for 6 products
+2025-11-05T12:39:02Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:39:02Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:39:02Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:40:30Z INFO Starting Underpin Notification
+2025-11-05T12:40:31Z INFO Reading customers from: customers.json
+2025-11-05T12:40:31Z INFO Loaded customer info from customers.json
+2025-11-05T12:40:31Z INFO Created customer list of 5 customers
+2025-11-05T12:40:31Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:40:31Z INFO Reading products from: products.json
+2025-11-05T12:40:31Z INFO Loaded product data for 6 products
+2025-11-05T12:40:31Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:40:31Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:40:31Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:40:32Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:40:33Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T12:40:33Z ERROR Failed to send email to azoladswe+main@gmail.com
+2025-11-05T12:40:33Z ERROR Failed to connect to gmail service: 'NoneType' object has no attribute 'name'
+2025-11-05T12:55:19Z INFO Starting Underpin Notification
+2025-11-05T12:55:20Z INFO Reading customers from: customers.json
+2025-11-05T12:55:20Z INFO Loaded customer info from customers.json
+2025-11-05T12:55:20Z INFO Created customer list of 5 customers
+2025-11-05T12:55:20Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:55:20Z INFO Reading products from: products.json
+2025-11-05T12:55:20Z INFO Loaded product data for 6 products
+2025-11-05T12:55:20Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:55:20Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:55:20Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:55:22Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:55:23Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T12:55:23Z ERROR Failed to send email to azoladswe+main@gmail.com
+2025-11-05T12:55:23Z ERROR Failed to connect to gmail service: list.append() takes exactly one argument (6 given)
+2025-11-05T12:55:46Z INFO Starting Underpin Notification
+2025-11-05T12:55:47Z INFO Reading customers from: customers.json
+2025-11-05T12:55:47Z INFO Loaded customer info from customers.json
+2025-11-05T12:55:47Z INFO Created customer list of 5 customers
+2025-11-05T12:55:47Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T12:55:47Z INFO Reading products from: products.json
+2025-11-05T12:55:47Z INFO Loaded product data for 6 products
+2025-11-05T12:55:47Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T12:55:47Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T12:55:47Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T12:55:48Z INFO Connection success to GMAIL SMTP
+2025-11-05T12:55:48Z INFO Email sent successfully to azoladswe+main@gmail.com

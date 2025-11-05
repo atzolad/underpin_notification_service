@@ -5,9 +5,18 @@ from utils.customers import (
     get_customer_to_product_map,
 )
 from utils.products import load_product_costs
-from utils.notifications import create_notifications, send_notifications
-from utils.config import customer_file, product_file, machine_ids
+from utils.notifications import (
+    create_notifications,
+    send_notifications,
+    send_no_sales_notification,
+)
+from utils.config import (
+    customer_file,
+    product_file,
+    machine_ids,
+)
 from utils.sheets import connect_sheets, write_to_sheet
+from utils.time import get_yesterdays_date
 import time
 from logger import setup_logging
 import os
@@ -60,7 +69,6 @@ def main():
             all_machine_last_sales.extend(machine_sales)
         except Exception as e:
             logger.error(f"Error fetching sales for {machine_id}: {str(e)}")
-    # print(f"ALL MACHINE SALES: {all_machine_last_sales}")
 
     # Go through the last sales and find all sales from yesterday. End execution if not found.
     daily_sales = get_daily_sales(all_machine_last_sales)
@@ -68,7 +76,8 @@ def main():
     if not daily_sales:
 
         logger.warning("No sales from yesterday. Ending program execution")
-        # TODO send a notification to the main email
+        send_no_sales_notification()
+
         return
 
     logger.info(f"{len(daily_sales)} sales from yesterday")
