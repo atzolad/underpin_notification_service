@@ -6,7 +6,6 @@ cffi==2.0.0
 charset-normalizer==3.4.4
 click==8.3.0
 cryptography==46.0.3
-Flask==3.1.2
 google-api-core==2.27.0
 google-auth==2.41.1
 google-auth-oauthlib==1.2.2
@@ -16,7 +15,6 @@ google-crc32c==1.7.1
 google-resumable-media==2.7.2
 googleapis-common-protos==1.71.0
 gspread==6.2.1
-gunicorn==23.0.0
 idna==3.11
 iniconfig==2.3.0
 itsdangerous==2.2.0
