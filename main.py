@@ -110,7 +110,6 @@ def main():
     messages, itemized_receipt_rows, sales_list = create_notifications(
         bucket, customer_sales_dict
     )
-
     notification_rows, notification_success, notification_fail = send_notifications(
         messages
     )

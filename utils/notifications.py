@@ -269,7 +269,7 @@ def create_notifications(bucket, customer_sales_dict: dict):
         message = create_email_msg(sender_email, recipients, subject, body, html_body)
         messages.append(
             create_email_obj(
-                message, customer, customer_sales, yesterdays_date, total_revenue
+                message, customer_sales, yesterdays_date, total_revenue, customer
             )
         )
 
@@ -305,7 +305,6 @@ def send_notifications(messages: list):
 
             # Loop through the list of messages and then send them all.
             for message in messages:
-
                 try:
                     server.send_message(message.message)
                     if not message.customer:
@@ -319,7 +318,6 @@ def send_notifications(messages: list):
                         )
                     successfully_sent += 1
                     notification_status = "sent"
-
                     notification_rows = add_notification_row(
                         notification_rows, message, notification_status
                     )
