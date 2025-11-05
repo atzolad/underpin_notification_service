@@ -56,12 +56,7 @@ def load_customers(bucket, customer_file = customer_file):
 def create_customer_list(customer_data):
     '''
     Loops through customers in customer_data JSON and creates a list of customer objects.
-
-    class Customer:
-    name: str
-    email: str
-    products: Tuple[str,...]
-
+    
     Args:
     customer_data(python obj containing JSON data)
 
