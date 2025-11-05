@@ -76,7 +76,20 @@ def main():
     if not daily_sales:
 
         logger.warning("No sales from yesterday. Ending program execution")
-        send_no_sales_notification()
+        notification_rows = send_no_sales_notification()
+        print(notification_rows)
+        try:
+            sheet = connect_sheets()
+
+        except Exception as e:
+            logger.error(f"Error connecting to sheets: {e}")
+
+        try:
+            write_to_sheet(sheet, 0, notification_rows)
+            logger.info(f"Wrote to Notification Sheet")
+
+        except Exception as e:
+            logger.error(f"Error writing to sheets: {str(e)}")
 
         return
 

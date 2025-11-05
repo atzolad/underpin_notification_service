@@ -238,3 +238,90 @@
 2025-11-05T12:55:47Z WARNING No sales from yesterday. Ending program execution
 2025-11-05T12:55:48Z INFO Connection success to GMAIL SMTP
 2025-11-05T12:55:48Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:00:45Z INFO Starting Underpin Notification
+2025-11-05T13:00:45Z INFO Reading customers from: customers.json
+2025-11-05T13:00:46Z INFO Loaded customer info from customers.json
+2025-11-05T13:00:46Z INFO Created customer list of 5 customers
+2025-11-05T13:00:46Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T13:00:46Z INFO Reading products from: products.json
+2025-11-05T13:00:46Z INFO Loaded product data for 6 products
+2025-11-05T13:00:46Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T13:00:46Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T13:00:46Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T13:00:46Z INFO Connection success to GMAIL SMTP
+2025-11-05T13:00:47Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:00:48Z ERROR Error writing to sheets: cannot access local variable 'notification_rows' where it is not associated with a value
+2025-11-05T13:02:59Z INFO Starting Underpin Notification
+2025-11-05T13:03:00Z INFO Reading customers from: customers.json
+2025-11-05T13:03:00Z INFO Loaded customer info from customers.json
+2025-11-05T13:03:00Z INFO Created customer list of 5 customers
+2025-11-05T13:03:00Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T13:03:00Z INFO Reading products from: products.json
+2025-11-05T13:03:00Z INFO Loaded product data for 6 products
+2025-11-05T13:03:00Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T13:03:00Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T13:03:00Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T13:03:01Z INFO Connection success to GMAIL SMTP
+2025-11-05T13:03:01Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:03:03Z ERROR Error writing to sheet: APIError: [400]: Invalid value at 'data.values[1]' (type.googleapis.com/google.protobuf.ListValue), 1
+Invalid value at 'data.values[2]' (type.googleapis.com/google.protobuf.ListValue), 0
+2025-11-05T13:03:03Z INFO Wrote to Notification Sheet
+2025-11-05T13:04:25Z INFO Starting Underpin Notification
+2025-11-05T13:04:25Z INFO Reading customers from: customers.json
+2025-11-05T13:04:26Z INFO Loaded customer info from customers.json
+2025-11-05T13:04:26Z INFO Created customer list of 5 customers
+2025-11-05T13:04:26Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T13:04:26Z INFO Reading products from: products.json
+2025-11-05T13:04:26Z INFO Loaded product data for 6 products
+2025-11-05T13:04:26Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T13:04:26Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T13:04:26Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T13:04:26Z INFO Connection success to GMAIL SMTP
+2025-11-05T13:04:27Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:04:28Z ERROR Error writing to sheet: APIError: [400]: Invalid value at 'data.values[1]' (type.googleapis.com/google.protobuf.ListValue), 1
+Invalid value at 'data.values[2]' (type.googleapis.com/google.protobuf.ListValue), 0
+2025-11-05T13:04:28Z INFO Wrote to Notification Sheet
+2025-11-05T13:05:27Z INFO Starting Underpin Notification
+2025-11-05T13:05:27Z INFO Reading customers from: customers.json
+2025-11-05T13:05:28Z INFO Loaded customer info from customers.json
+2025-11-05T13:05:28Z INFO Created customer list of 5 customers
+2025-11-05T13:05:28Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T13:05:28Z INFO Reading products from: products.json
+2025-11-05T13:05:28Z INFO Loaded product data for 6 products
+2025-11-05T13:05:28Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T13:05:28Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T13:05:28Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T13:05:28Z INFO Connection success to GMAIL SMTP
+2025-11-05T13:05:29Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:05:30Z ERROR Error writing to sheet: APIError: [400]: Invalid value at 'data.values[1]' (type.googleapis.com/google.protobuf.ListValue), 1
+Invalid value at 'data.values[2]' (type.googleapis.com/google.protobuf.ListValue), 0
+2025-11-05T13:05:30Z INFO Wrote to Notification Sheet
+2025-11-05T13:09:49Z INFO Starting Underpin Notification
+2025-11-05T13:09:49Z INFO Reading customers from: customers.json
+2025-11-05T13:09:50Z INFO Loaded customer info from customers.json
+2025-11-05T13:09:50Z INFO Created customer list of 5 customers
+2025-11-05T13:09:50Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T13:09:50Z INFO Reading products from: products.json
+2025-11-05T13:09:50Z INFO Loaded product data for 6 products
+2025-11-05T13:09:50Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T13:09:50Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T13:09:50Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T13:09:50Z INFO Connection success to GMAIL SMTP
+2025-11-05T13:09:51Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:09:52Z ERROR Error writing to sheet: APIError: [400]: Invalid values[235][3]: list_value 	 {
+}
+
+2025-11-05T13:09:52Z INFO Wrote to Notification Sheet
+2025-11-05T13:13:45Z INFO Starting Underpin Notification
+2025-11-05T13:13:46Z INFO Reading customers from: customers.json
+2025-11-05T13:13:46Z INFO Loaded customer info from customers.json
+2025-11-05T13:13:46Z INFO Created customer list of 5 customers
+2025-11-05T13:13:46Z INFO Created dictionary of product keys with customer values for 6 products
+2025-11-05T13:13:46Z INFO Reading products from: products.json
+2025-11-05T13:13:46Z INFO Loaded product data for 6 products
+2025-11-05T13:13:46Z INFO Fetching sales for Machine ID: 567219276
+2025-11-05T13:13:46Z INFO Fetching sales for Machine ID: 791321280
+2025-11-05T13:13:46Z WARNING No sales from yesterday. Ending program execution
+2025-11-05T13:13:47Z INFO Connection success to GMAIL SMTP
+2025-11-05T13:13:48Z INFO Email sent successfully to azoladswe+main@gmail.com
+2025-11-05T13:13:49Z INFO Wrote to Notification Sheet

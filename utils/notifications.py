@@ -362,12 +362,11 @@ def add_notification_row(notification_rows, message, notification_status):
                 message.yesterdays_date,
                 "Main Notification Address",
                 notification_address,
-                [],
+                "No Sales",
                 0,
                 notification_status,
             ]
         )
-
     return notification_rows
 
 
@@ -381,7 +380,7 @@ def send_no_sales_notification():
         f"Sales-Notification service completed successfully- No sales from {yesterdays_date}",
         None,
     )
-    send_notifications(
+    notification_rows, successfully_sent, failed_sends = send_notifications(
         [create_email_obj(message, [], yesterdays_date, 0, customer=None)]
     )
-    return
+    return notification_rows
