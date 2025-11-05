@@ -34,13 +34,13 @@ def get_last_sales(machine_id):
     # last_sales = create_last_sales()
 
     # Use an environment variable to define the bucket name for Google Cloud Storage
-    # BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
+    BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
     # Initialize the storage client and bucket for Google Cloud
-    # storage_client = storage.Client()
-    # bucket = storage_client.bucket(BUCKET_NAME)
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(BUCKET_NAME)
 
     # Using load customers for speed of testing rather than writing a new function to pull last sales
-    # last_sales = load_customers(bucket, "last_sales.json")
+    last_sales = load_customers(bucket, "last_sales.json")
     return last_sales
     """
     try:

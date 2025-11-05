@@ -16,7 +16,6 @@ from utils.config import (
     machine_ids,
 )
 from utils.sheets import connect_sheets, write_to_sheet
-from utils.time import get_yesterdays_date
 import time
 from logger import setup_logging
 import os
