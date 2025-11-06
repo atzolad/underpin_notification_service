@@ -11,11 +11,10 @@ It uses these dictionaries to email a notification to each customer listing thei
 
 The program also creates multiple records in Google Sheets- one containing each notification that was sent, one containing a combined itemized receipt for each customers item including sales between multiple machines.  Program utilizes the GOOGLE SHEETS API to update sheets. 
 
-In order to trigger the notification send- the file cron.py includes a minimal Flask app creating an endpoint for Google Cloud Scheduler to hit. The Cloud Scheduler should hit the main url for the service notification in google cloud to trigger this. ie https://google_service_url.us-west2.run.app/
+Program is trigger from a Google Cloud Run Job. 
 
 Files for the main functions are stored in the utils directory. 
 Main.py is the main python file
-Cron.py is the file to execute for the Cloud Scheduler that will trigger main.py. In the dockerfile- use gunicorn to setup the HTTP server to serve the flask app and run cron.py: ex- CMD gunicorn --bind 0.0.0.0:$PORT cron:app
 
 
 DEPLOYMENT
@@ -31,47 +30,49 @@ WORKDIR /app
 # Copy requirements first (for caching)
 COPY requirements.txt .
 
-#  Install dependencies (including Flask, which is in your cron.py)
+#  Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 #  Copy all necessary code into the app directory in the container
 
 COPY . /app
 
-#  Expose port (Good practice, though not strictly necessary for Cloud Run)
-EXPOSE 8080
 
-#Set the flask environment so it doesn't setup the local development server
-ENV FLASK_ENV='production'
-
-# Run the Flask server named "app" with Gunicorn from the cron.py file
-CMD gunicorn --bind 0.0.0.0:$PORT cron:app
-
+# Run the notifcation program named main.py
+CMD ["python", "main.py"]
 
 Make sure to include secrets or sensitive files in a .dockerignore
 
 -------------------------------------------------------------------------------------
 
-# Build the image and tag it for your Google Cloud registry. F flag sets the specific file (since it is not just Dockerignore)
-docker build -f Dockerfile.cron -t gcr.io/{gcp-project_name}/{service_name}:latest .
+# Set environmental variables
+PROJECT_ID="your-gcp-project-id"
+REGION="us-west2" 
+IMAGE_NAME="my-job-image"
+JOB_NAME="my-job-name"
+REPO_NAME="GCP-artifact-repo-name"
+IMAGE_PATH="${REGION}-docker.pkg.dev/${PROJECT_ID}/${IMAGE_NAME}:latest"
 
-# Authenticate Docker to GCR (if you haven't already)
-gcloud auth configure-
+# Create a GCP artifact repo
+gcloud artifacts repositories create ${REPO_NAME} \
+    --repository-format=docker \
+    --location=${REGION} \
+    --description="Repository for the daily underpin-notifications cron job image"
 
-# Push the Docker Image
-docker push gcr.io/{gcp-project_name}/{service_name}:latest
+ # Authenticate Docker to push to Google Cloud
+gcloud auth configure-docker ${REGION}-docker.pkg.dev
 
-# Build for amd64/linux architecture and push in one command- gcp runs this architecture.
-docker buildx build -f Dockerfile.cron --platform linux/amd64 -t gcr.io/{gcp-project_name}/{service_name}:latest --push .
+# Uploads to the Google Cloud Build service
+gcloud builds submit --tag ${IMAGE_PATH} .
 
-# Deploy the service
-gcloud run deploy {service_name} \
-    --image gcr.io/{gcp-project_name}/{service_name} :latest \
-    --platform managed \
-    --region us-west2 \
-    --no-allow-unauthenticated \
-    --max-instances 1 \
-    --port 8080 # Cloud Run requires a port, though this script won't use it
+# Build the image using the Dockerfile and tag it for the registry
+gcloud builds submit --tag ${REGION}-docker.pkg.dev/${PROJECT_ID}/${IMAGE_NAME}:latest .
+
+
+# Build the image using the Dockerfile and tag it for the registry
+gcloud builds submit --tag ${REGION}-docker.pkg.dev/${PROJECT_ID}/${IMAGE_NAME}:latest .
+
+
 
 
   

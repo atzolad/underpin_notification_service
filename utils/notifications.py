@@ -303,19 +303,16 @@ def send_notifications(messages: list):
             server.login(sender_email, sender_pw)
             logger.info("Connection success to GMAIL SMTP")
 
+            if not messages[0].customer:
+                return send_no_sales(server, messages[0], notification_rows)
+
             # Loop through the list of messages and then send them all.
             for message in messages:
                 try:
                     server.send_message(message.message)
-                    if not message.customer:
-                        logger.info(
-                            f"Email sent successfully to {notification_address}"
-                        )
-                    else:
-
-                        logger.info(
-                            f"Email sent successfully to  {message.customer.name} at {message.customer.email} and {notification_address} "
-                        )
+                    logger.info(
+                        f"Email sent successfully to  {message.customer.name} at {message.customer.email} and {notification_address} "
+                    )
                     successfully_sent += 1
                     notification_status = "sent"
                     notification_rows = add_notification_row(
@@ -323,12 +320,9 @@ def send_notifications(messages: list):
                     )
 
                 except Exception as e:
-                    if not message.customer:
-                        logger.error(f"Failed to send email to {notification_address}")
-                    else:
-                        logger.error(
-                            f"Failed to send email to {message.customer.name}: {str(e)}"
-                        )
+                    logger.error(
+                        f"Failed to send email to {message.customer.name}: {str(e)}"
+                    )
                     failed_sends += 1
                     notification_status = "failed"
                     notification_rows = add_notification_row(
@@ -340,6 +334,18 @@ def send_notifications(messages: list):
         return f"Failed to connect to gmail service: {e}"
 
     return notification_rows, successfully_sent, failed_sends
+
+
+def send_no_sales(server, message, notification_rows):
+    try:
+        server.send_message(message.message)
+        logger.info(f"Email sent successfully to {notification_address}")
+        notification_row = add_notification_row(notification_rows, message, "sent")
+        return notification_row, 1, 0
+    except Exception as e:
+        logger.error(f"Failed to send email to {notification_address}")
+        notification_row = add_notification_row(notification_rows, message, "failed")
+        return notification_row, 0, 1
 
 
 def add_notification_row(notification_rows, message, notification_status):
