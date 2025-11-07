@@ -103,7 +103,8 @@ def main():
     logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
 
     if len(customer_sales_dict) == 0:
-        logger.warning(f"Customer sales dictionary is empty")
+        logger.Error(f"Customer sales dictionary is empty")
+        return
 
     notification_start_time = time.time()
 
@@ -134,6 +135,7 @@ def main():
     logger.info(f"It took {connect_sheet_time} seconds to connect to sheets")
 
     sheet_start_time = time.time()
+
     try:
 
         write_to_sheet(sheet, 0, notification_rows)
