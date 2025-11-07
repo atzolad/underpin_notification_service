@@ -41,7 +41,7 @@ def load_customers(bucket, customer_file=customer_file):
     except Exception as e:
         # Handle cases where the file doesn't exist or is empty
         logger.error(f"Error reading {customer_file} from GCS: {e}")
-        return []  # Return empty list or handle the error
+        return []  # Return empty list
 
 
 def create_customer_list(customer_data):

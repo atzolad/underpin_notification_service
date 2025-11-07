@@ -31,17 +31,15 @@ def get_last_sales(machine_id):
     url = f"https://lynx.nayax.com/operational/v1/machines/{machine_id}/lastSales"
     headers = {"Authorization": f"Bearer {NAYAX_API_KEY}", "accept": "application/js"}
 
-    # This is for testing- need to remove this later.
-    # last_sales = create_last_sales()
-
     # Use an environment variable to define the bucket name for Google Cloud Storage
     BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
     # Initialize the storage client and bucket for Google Cloud
     storage_client = storage.Client()
     bucket = storage_client.bucket(BUCKET_NAME)
 
-    last_sales = load_customers(bucket, "last_sales.json")
-    return last_sales
+    # For testing without API connection
+    mock_last_sales_response = load_customers(bucket, "last_sales.json")
+    return mock_last_sales_response
 
     """
     try:
@@ -99,9 +97,9 @@ def group_sales_by_customer(
 
     Args: daily_sales (list) \n
           customer_product_dict(dict)  - dictionary where the keys are products and the values are customer objects. \n
-          product_costs (dict) - dictionary of {"product name": price (float ex: 99.99)} \n
+          product_costs (dict) - dictionary of {"product name": price (float)} \n
 
-    Returns: Dict in the format: {"product name:" product, "settlement_value": settlement_value, "quantity_sold": quantity, "transaction_dt": "datetime", "revenue": "revenue (float) ex: 99.99"}
+    Returns: Dict in the format: {"product name:" product, "settlement_value": settlement_value, "quantity_sold": quantity, "transaction_dt": datetime, "revenue": revenue (float)}
     """
 
     customer_sales_dict = {}
@@ -130,8 +128,8 @@ def group_sales_by_customer(
     return customer_sales_dict
 
 
-# This is purely for testing.
-
+# For testing purposes
+"""
 test_date_1 = "2025-11-04T16:53:51.225Z"
 test_date_2 = "2025-11-04T16:53:51.225Z"
 test_date_3 = "2025-11-04T16:53:51.225Z"
@@ -139,8 +137,8 @@ test_date_4 = "2025-11-04T16:53:51.225Z"
 test_date_5 = "2025-11-04T16:53:51.225Z"
 
 test_date = "2025-11-04T16:53:51.225Z"
-
-
+"""
+"""
 mock_last_sales_response = [
     {
         "TransactionID": 1,
@@ -283,3 +281,4 @@ mock_last_sales_response = [
         "SiteName": "IL1",
     },
 ]
+"""

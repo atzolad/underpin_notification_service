@@ -204,7 +204,7 @@ def create_notifications(bucket, customer_sales_dict: dict):
                 ]
             )
 
-            # Create a dictionary of products sold for every customer. Each customer gets one line per product. Also update the product quantities dictionary which exists only within the loop for each customer- to add the aggregated product sales to the email body.
+            # Create a dictionary of products sold for every customer. Each customer gets one line per product. Update the product quantities dictionary which exists only within the loop for each customer to add the aggregated product sales to the email body.
             if product_name in sales_map.keys():
                 new_quantity_sold = sales_map[product_name][4] + quantity_sold
                 combined_product_quantities[product_name][0] += quantity_sold
@@ -303,7 +303,7 @@ def send_notifications(messages: list):
             server.login(sender_email, sender_pw)
             logger.info("Connection success to GMAIL SMTP")
 
-            if not messages[0].customer:
+            if not messages or not messages[0].customer:
                 return send_no_sales(server, messages[0], notification_rows)
 
             # Loop through the list of messages and then send them all.
