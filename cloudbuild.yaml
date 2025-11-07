@@ -18,7 +18,7 @@ steps:
   args:
     - 'run'
     - 'jobs'
-    - 'replace'
+    - 'update'
     # Use a user-defined variable for the Job Name
     - '$_JOB_NAME' 
     - '--image'
