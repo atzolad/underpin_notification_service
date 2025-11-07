@@ -17,22 +17,24 @@ machine_ids = ["567219276", "791321280"]
 # The JSON file storing customer data
 customer_file = "customers.json"
 
-#The file containing the product prices
+# The file containing the product prices
 product_file = "products.json"
 
-#The file containing the email template
+# The file containing the email template
 email_template = "email-template.json"
 
-#The local timezone of the machines
+# The local timezone of the machines
 machine_tz = "America/Los_Angeles"
 
-#Gmail login info
+# Gmail login info
 sender_email = os.environ.get("GMAIL_ADDRESS")
 sender_pw = os.environ.get("GMAIL_APP_PW")
 
 if not sender_email or not sender_pw:
     logger.error("Missing Gmail credentials. Please set GMAIL_ADDRESS and GMAIL_APP_PW")
-    raise EnvironmentError("Missing Gmail credentials. Please set GMAIL_ADDRESS and GMAIL_APP_PW.")
+    raise EnvironmentError(
+        "Missing Gmail credentials. Please set GMAIL_ADDRESS and GMAIL_APP_PW."
+    )
 
-#Notification parameters
-notification_address = "azoladswe+main@gmail.com"
+# Notification parameters
+notification_address = os.eniron.get("NOTIFICATION_ADDRESS")
