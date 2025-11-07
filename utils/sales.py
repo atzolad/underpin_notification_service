@@ -40,9 +40,9 @@ def get_last_sales(machine_id):
     storage_client = storage.Client()
     bucket = storage_client.bucket(BUCKET_NAME)
 
-    # Using load customers for speed of testing rather than writing a new function to pull last sales
     last_sales = load_customers(bucket, "last_sales.json")
-    # return last_sales
+    return last_sales
+
     """
     try:
 
@@ -68,7 +68,6 @@ def get_daily_sales(last_sales: list):
     Args: Last_sales (list)
 
     Returns: list of sales from yesterday.
-
 
     """
     daily_sales = []
@@ -112,7 +111,6 @@ def group_sales_by_customer(
         settlement_value = sale["SettlementValue"]
         quantity = sale["Quantity"]
         revenue = product_costs[product] * quantity
-        # TODO convert to PST- or leave it in GMT if thats what machine records as
         transaction_dt = str(convert_gmt_pst(sale["AuthorizationDateTimeGMT"]))
         customer = customer_product_dict.get(product)
 
@@ -141,24 +139,6 @@ test_date_4 = "2025-11-04T16:53:51.225Z"
 test_date_5 = "2025-11-04T16:53:51.225Z"
 
 test_date = "2025-11-04T16:53:51.225Z"
-
-
-def create_last_sales():
-
-    last_sales = []
-
-    for i in range(100):
-        new_sale = {
-            "SettlementValue": 10.00,
-            "ProductName": f"Product {i}",
-            "Quantity": 1,
-            "AuthorizationDateTimeGMT": test_date,
-            "MachineAuthorizationTime": test_date,
-        }
-
-        last_sales.append(new_sale)
-
-    return last_sales
 
 
 mock_last_sales_response = [
