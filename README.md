@@ -153,9 +153,9 @@ echo "Service Account $SCHEDULER_SA_EMAIL created and granted Invoker role."
 
 ### Set environmental variables for the scheduler job
 ```
-SCHEDULER_SA_EMAIL="underpin-sales-notification@underpin-notification.iam.gserviceaccount.com"
-SCHEDULER_SA_NAME="underpin-sales-notification"
-SCHEDULER_NAME="underpin-sales-notification"
+SCHEDULER_SA_EMAIL="scheduler_email"
+SCHEDULER_SA_NAME="scheduler_service_account_name"
+SCHEDULER_NAME="scheduler_name"
 PROJECT_ID="your-gcp-project-id"
 REGION="us-west2" 
 IMAGE_NAME="my-job-image"
