@@ -31,3 +31,6 @@ steps:
 
 images:
 - 'us-west2-docker.pkg.dev/$PROJECT_ID/underpin-notifications-cron-image/underpin-notifications-cron-image:$_COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
