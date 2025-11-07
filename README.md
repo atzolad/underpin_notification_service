@@ -6,7 +6,7 @@ Sales notification system for Underpin's Vending machines.
 
 This program hits the [NAYAX API](https://developerhub.nayax.com/reference/get-last-sales-for-machine) and retrieves a list of the last sales from each vending machine. It parses the list looking for the sales for the previous day, then builds a dictionary with customers as the key and a list of their sales as the value. Also builds a dictionary with products as the keys and customers as the values. 
 
-It uses these dictionaries and GOOGLE SMTP to email a notification to each customer with a html table listing their sales from the previous day. Each customer gets one email while an email is also sent to the main notification address.
+It uses these dictionaries and Google SMTP to email a notification to each customer with an HTML table listing their sales from the previous day. Each customer gets one email while an email is also sent to the main notification address.
 
 The program also creates multiple records in Google Sheets using the Google Sheets API- one containing each notification that was sent, one containing a combined itemized receipt for each customer's item including sales between multiple machines. 
 
