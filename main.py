@@ -101,6 +101,7 @@ def main():
         daily_sales, customer_product_dict, product_costs
     )
     logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
+
     if len(customer_sales_dict) == 0:
         logger.warning(f"Customer sales dictionary is empty")
 

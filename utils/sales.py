@@ -2,6 +2,7 @@ from utils.time import is_yesterday, is_before_yesterday, convert_gmt_pst
 from utils.config import NAYAX_API_KEY
 from logger import setup_logging
 from utils.customers import load_customers
+import requests
 
 # For testing:
 from google.cloud import storage
@@ -41,7 +42,7 @@ def get_last_sales(machine_id):
 
     # Using load customers for speed of testing rather than writing a new function to pull last sales
     last_sales = load_customers(bucket, "last_sales.json")
-    return last_sales
+    # return last_sales
     """
     try:
 
@@ -57,7 +58,7 @@ def get_last_sales(machine_id):
     except requests.exceptions.RequestException as e:
         logger.error(f"Error in HTTP request: {e}")
         return None
-      """
+    """
 
 
 def get_daily_sales(last_sales: list):
@@ -160,7 +161,7 @@ def create_last_sales():
     return last_sales
 
 
-last_sales = [
+mock_last_sales_response = [
     {
         "TransactionID": 1,
         "PaymentServiceTransactionID": "PS12345678901",
