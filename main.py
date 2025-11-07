@@ -29,7 +29,7 @@ def main():
 
     logger = setup_logging(__name__)
 
-    logger.info("Starting Underpin Notification")
+    logger.info("Starting Main.py")
 
     # Use an environment variable to define the bucket name for Google Cloud Storage
     BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
