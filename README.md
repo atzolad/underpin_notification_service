@@ -4,7 +4,7 @@
 Sales notification system for Underpin's Vending machines.
 
 
-This program hits the NAYAX api and retrieves a list of the last sales from each vending machine. It parses the list looking for the sales for the previous day, then builds a dictionary with customers as the key and a list of their sales as the value. Also builds a dictionary with products as the keys and customers as the values. 
+This program hits the [NAYAX API](https://developerhub.nayax.com/reference/get-last-sales-for-machine) and retrieves a list of the last sales from each vending machine. It parses the list looking for the sales for the previous day, then builds a dictionary with customers as the key and a list of their sales as the value. Also builds a dictionary with products as the keys and customers as the values. 
 
 It uses these dictionaries and GOOGLE SMTP to email a notification to each customer with a html table listing their sales from the previous day. Each customer gets one email while an email is also sent to the main notification address.
 
@@ -15,7 +15,8 @@ Program is deployed as a Google Cloud Run Job triggered via Google Cloud Schedul
 Main.py is the main executable python file. 
 Files for the main functions are stored in the utils directory. 
 
-
+-------------------------------------------------------------------------------------  
+ 
 ## DEPLOYMENT:
 
 ### -Create a Dockerfile:
@@ -84,8 +85,6 @@ gcloud artifacts repositories create ${REPO_NAME} \
     --description="Repository for the daily underpin-notifications cron job image"
 ```
 
-    
-
 ### Authenticate Docker to push to Google Cloud
 ```bash
 gcloud auth configure-docker ${REGION}-docker.pkg.dev
@@ -117,7 +116,7 @@ gcloud run jobs create ${JOB_NAME} --image ${REGION}-docker.pkg.dev/${JOB_NAME}/
 
 On the Cloud Console go to Cloud Run -> click on the correct service. Click Edit and deploy new revision -> Variables and Secrets -> add environmental variables there. Pasting the copied list from .env will populate them all. In this case I also mounted a volume from the Secrets manager with my credentials.json file containing Google API credentials. 
 
-
+-------------------------------------------------------------------------------------  
 
 ## Create the Google Cloud Scheduler Job to trigger notification service:
 
@@ -125,8 +124,6 @@ On the Cloud Console go to Cloud Run -> click on the correct service. Click Edit
 ```
 gcloud services enable cloudscheduler.googleapis.com
 ```
-
-
 
 ### Define the name for the new Service Account (SA)
 ```
