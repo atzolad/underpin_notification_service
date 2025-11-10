@@ -37,4 +37,4 @@ if not sender_email or not sender_pw:
     )
 
 # Notification parameters
-notification_address = os.eniron.get("NOTIFICATION_ADDRESS")
+notification_address = os.environ.get("NOTIFICATION_ADDRESS")
