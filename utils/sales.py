@@ -2,6 +2,7 @@ from utils.time import is_yesterday, is_before_yesterday, convert_gmt_pst
 from utils.config import NAYAX_API_KEY
 from logger import setup_logging
 from utils.customers import load_customers
+from utils.products import sanitize_product_name
 import requests
 
 # For testing:
@@ -37,26 +38,24 @@ def get_last_sales(machine_id):
     storage_client = storage.Client()
     bucket = storage_client.bucket(BUCKET_NAME)
 
-    # For testing without API connection
-    mock_last_sales_response = load_customers(bucket, "last_sales.json")
-    return mock_last_sales_response
+    # # For testing without API connection
+    # mock_last_sales_response = load_customers(bucket, "last_sales.json")
+    # return mock_last_sales_response
 
-    """
     try:
 
-      response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers)
 
-      if response.status_code == 200:
-          last_sales = response.json()
-          logger.info(f"Succesfully connected to LYNX API")
-          return last_sales
-      else:
-          logger.error(f'Error: {response.status_code}')
+        if response.status_code == 200:
+            last_sales = response.json()
+            logger.info(f"Succesfully connected to LYNX API")
+            return last_sales
+        else:
+            logger.error(f"Error: {response.status_code}")
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Error in HTTP request: {e}")
         return None
-    """
 
 
 def get_daily_sales(last_sales: list):
@@ -105,12 +104,26 @@ def group_sales_by_customer(
     customer_sales_dict = {}
 
     for sale in daily_sales:
-        product = sale["ProductName"]
+        product = sanitize_product_name(sale["ProductName"])
         settlement_value = sale["SettlementValue"]
-        quantity = sale["Quantity"]
-        revenue = product_costs[product] * quantity
+        # API response seems to return everything with a quantity of 0 so I am making this 1 for now.
+        # quantity = sale["Quantity"]
+        quantity = 1
+        # Avoid a key error if this product isn't in the product list
+        if product in product_costs:
+            revenue = product_costs[product] * quantity
+        else:
+            logger.error(f"Product {product} from sale not found in product list")
+            revenue = 0.0
+        # revenue = product_costs[product] * quantity
         transaction_dt = str(convert_gmt_pst(sale["AuthorizationDateTimeGMT"]))
-        customer = customer_product_dict.get(product)
+
+        # Avoid a key error if this product isn't in the product list
+        if product in customer_product_dict:
+            customer = customer_product_dict.get(product)
+        else:
+            logger.error(f"Product {product} not found in Customer Product Dict")
+            continue
 
         if customer:
             sale_info = {

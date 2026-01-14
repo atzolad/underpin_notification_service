@@ -189,7 +189,12 @@ def create_notifications(bucket, customer_sales_dict: dict):
 
         for sale in sales:
             product_name = sale["product_name"]
-            revenue = round(sale["revenue"], 2)
+            # The api response actually includes the settlement value for the credit/cash transactions.
+            if product_name == "Cash Sale" or product_name == "Credit Card Sale":
+                revenue = round(sale["settlement_value"], 2)
+            else:
+                revenue = round(sale["revenue"], 2)
+
             total_revenue += revenue
             quantity_sold = sale["quantity_sold"]
 

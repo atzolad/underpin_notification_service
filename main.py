@@ -20,6 +20,7 @@ import time
 from logger import setup_logging
 import os
 from google.cloud import storage
+import pprint
 
 
 def main():
@@ -75,7 +76,7 @@ def main():
     # Go through the last sales and find all sales from yesterday. End execution if not found.
     daily_sales = get_daily_sales(all_machine_last_sales)
 
-    # Send a notification to main address and end program execution if no sales found.
+    # # Send a notification to main address and end program execution if no sales found.
     if not daily_sales:
 
         logger.info("No sales from yesterday. Ending program execution")
@@ -103,7 +104,7 @@ def main():
     logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
 
     if len(customer_sales_dict) == 0:
-        logger.Error(f"Customer sales dictionary is empty")
+        logger.error(f"Customer sales dictionary is empty")
         return
 
     notification_start_time = time.time()
