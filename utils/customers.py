@@ -16,7 +16,35 @@ class Customer:
     products: Tuple[str, ...]
 
 
-def load_customers(bucket, customer_file=customer_file):
+# def load_customers(bucket, customer_file=customer_file):
+#     """
+#     Opens the customers json file and...
+
+#     Args:
+#         filename (str): Path to file containing json list of customers. Defaults to the customer_file in the config.
+
+#     Returns:
+#         An object containing the loaded JSON data.
+#     """
+
+#     blob = bucket.blob(customer_file)
+#     logger.info(f"Reading customers from: {customer_file}")
+
+#     try:
+#         # download_as_bytes() returns the content, which we decode to a string
+#         customer_string = blob.download_as_bytes().decode("utf-8")
+
+#         # 3. Load and return the JSON data
+#         customer_data = json.loads(customer_string)
+#         return customer_data
+
+#     except Exception as e:
+#         # Handle cases where the file doesn't exist or is empty
+#         logger.error(f"Error reading {customer_file} from GCS: {e}")
+#         return []  # Return empty list
+
+
+def load_customers(conn):
     """
     Opens the customers json file and...
 
@@ -27,21 +55,23 @@ def load_customers(bucket, customer_file=customer_file):
         An object containing the loaded JSON data.
     """
 
-    blob = bucket.blob(customer_file)
-    logger.info(f"Reading customers from: {customer_file}")
+    # blob = bucket.blob(customer_file)
+    # logger.info(f"Reading customers from: {customer_file}")
 
-    try:
-        # download_as_bytes() returns the content, which we decode to a string
-        customer_string = blob.download_as_bytes().decode("utf-8")
+    # with conn.cursor as curr:
 
-        # 3. Load and return the JSON data
-        customer_data = json.loads(customer_string)
-        return customer_data
+    # try:
+    #     # download_as_bytes() returns the content, which we decode to a string
+    #     customer_string = blob.download_as_bytes().decode("utf-8")
 
-    except Exception as e:
-        # Handle cases where the file doesn't exist or is empty
-        logger.error(f"Error reading {customer_file} from GCS: {e}")
-        return []  # Return empty list
+    #     # 3. Load and return the JSON data
+    #     customer_data = json.loads(customer_string)
+    #     return customer_data
+
+    # except Exception as e:
+    #     # Handle cases where the file doesn't exist or is empty
+    #     logger.error(f"Error reading {customer_file} from GCS: {e}")
+    #     return []  # Return empty list
 
 
 def create_customer_list(customer_data):
