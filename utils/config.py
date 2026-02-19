@@ -12,7 +12,12 @@ if not NAYAX_API_KEY:
     logger.error(f"Missing Nayax API key.")
     raise EnvironmentError("Missing Nayax API key. Please set NAYAX_API_KEY")
 
-machine_ids = ["567219276", "791321280"]
+# machine_ids = ["567219276", "791321280"]
+machine_id_str = os.environ.get("MACHINE_IDS")
+if machine_id_str:
+    machine_ids = machine_id_str.split(",")
+else:
+    logger.error(f"Missing Machine IDs environmental var")
 
 # The JSON file storing customer data
 customer_file = "customers.json"
@@ -27,8 +32,10 @@ email_template = "email-template.json"
 machine_tz = "America/Los_Angeles"
 
 # Gmail login info
+
 sender_email = os.environ.get("GMAIL_ADDRESS")
 sender_pw = os.environ.get("GMAIL_APP_PW")
+
 
 if not sender_email or not sender_pw:
     logger.error("Missing Gmail credentials. Please set GMAIL_ADDRESS and GMAIL_APP_PW")

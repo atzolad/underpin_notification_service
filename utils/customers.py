@@ -4,6 +4,7 @@ from typing import List, Tuple
 from .config import customer_file
 from google.cloud import storage
 from logger import setup_logging
+from utils.products import sanitize_product_name
 
 
 logger = setup_logging(__name__)
@@ -119,3 +120,58 @@ def get_customer_to_product_map(customers):
             customer_product_dict[product] = customer
 
     return customer_product_dict
+
+
+def get_customers_products(daily_sales, conn) -> tuple[dict, dict]:
+    daily_sales_products = list(
+        set(sanitize_product_name(sale["ProductName"]) for sale in daily_sales)
+    )
+    print(daily_sales_products)
+    customer_product_dict = {}
+    product_costs = {}
+
+    try:
+
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                    SELECT c.name, c.email, p.name, p.price
+                    FROM customers AS c
+                    JOIN customer_products AS cp on c.id = cp.customer_id
+                    JOIN products AS p ON cp.product_id = p.id
+                    WHERE p.name = ANY(%s)
+
+                    """,
+                (daily_sales_products,),
+            )
+
+            customer_data = cur.fetchall()
+
+            for customer in customer_data:
+                name = customer[0]
+                email = customer[1]
+                product = customer[2]
+                product_cost = customer[3]
+
+                if product not in customer_product_dict:
+                    customer_product_dict[product] = Customer(
+                        name=name, email=email, products=(product,)
+                    )
+                else:
+                    logger.warning(
+                        f"Product {product} already in customer_product_dict"
+                    )
+
+                if product not in product_costs:
+                    product_costs[product] = product_cost
+
+                else:
+                    logger.warning(f"Product {product} already in product_costs")
+
+        return customer_product_dict, product_costs
+
+    except Exception as e:
+        logger.error(
+            f"Error loading customer and product info from db: {e}",
+            exc_info=True,
+        )

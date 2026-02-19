@@ -38,7 +38,7 @@ def get_last_sales(machine_id):
     storage_client = storage.Client()
     bucket = storage_client.bucket(BUCKET_NAME)
 
-    # # For testing without API connection
+    # For testing without API connection
     # mock_last_sales_response = load_customers(bucket, "last_sales.json")
     # return mock_last_sales_response
 
@@ -143,15 +143,15 @@ def group_sales_by_customer(
 
 # For testing purposes
 """
-test_date_1 = "2025-11-04T16:53:51.225Z"
-test_date_2 = "2025-11-04T16:53:51.225Z"
-test_date_3 = "2025-11-04T16:53:51.225Z"
-test_date_4 = "2025-11-04T16:53:51.225Z"
-test_date_5 = "2025-11-04T16:53:51.225Z"
+test_date_1 = "2026-02-18T16:53:51.225Z"
+test_date_2 = "2026-02-18T16:53:51.225Z"
+test_date_3 = "2026-02-18T16:53:51.225Z"
+test_date_4 = "2026-02-18T16:53:51.225Z"
+test_date_5 = "2026-02-18T16:53:51.225Z"
 
-test_date = "2025-11-04T16:53:51.225Z"
-"""
-"""
+test_date = "2026-02-18T16:53:51.225Z"
+
+
 mock_last_sales_response = [
     {
         "TransactionID": 1,
@@ -169,7 +169,7 @@ mock_last_sales_response = [
         "CardNumber": "************1234",
         "CardBrand": "Visa",
         "CLI": "+1234567890",
-        "ProductName": "Capsule Top",
+        "ProductName": "B Stickers RIGHT $3",
         "MultivendTransactionBit": "true",
         "MultivendNumverOfProducts": 2,
         "UnitOfMeasurement": "Item",
@@ -197,7 +197,7 @@ mock_last_sales_response = [
         "CardNumber": "************1234",
         "CardBrand": "Visa",
         "CLI": "+1234567890",
-        "ProductName": "Stickers RIGHT",
+        "ProductName": "B Capsule BOTTOM $5",
         "MultivendTransactionBit": "true",
         "MultivendNumverOfProducts": 2,
         "UnitOfMeasurement": "Item",
@@ -225,7 +225,7 @@ mock_last_sales_response = [
         "CardNumber": "************1234",
         "CardBrand": "Visa",
         "CLI": "+1234567890",
-        "ProductName": "New Test Item",
+        "ProductName": "B Capsule BOTTOM $5",
         "MultivendTransactionBit": "false",
         "MultivendNumverOfProducts": 1,
         "UnitOfMeasurement": "Item",
@@ -253,7 +253,7 @@ mock_last_sales_response = [
         "CardNumber": "************1234",
         "CardBrand": "Visa",
         "CLI": "+1234567890",
-        "ProductName": "TRADING CARD LEFT",
+        "ProductName": "B Stickers RIGHT $3",
         "MultivendTransactionBit": "false",
         "MultivendNumverOfProducts": 1,
         "UnitOfMeasurement": "Item",
@@ -276,7 +276,7 @@ mock_last_sales_response = [
         "AuthorizationValue": 60.00,
         "SettlementValue": 60.50,
         "CurrencyCode": "USD",
-        "PaymentMethod": "Credit Card",
+        "PaymentMethod": "B Stickers RIGHT $3",
         "RecognitionMethod": "Chip",
         "CardNumber": "************1234",
         "CardBrand": "Visa",
