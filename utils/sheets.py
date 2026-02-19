@@ -1,6 +1,7 @@
 import gspread
 import os
 from logger import setup_logging
+from decimal import Decimal
 
 logger = setup_logging(__name__)
 
@@ -60,7 +61,13 @@ def write_to_sheet(sheet, index, rows):
 
     try:
         worksheet = sheet.get_worksheet(index)
-        worksheet.append_rows(rows)
+        cleaned_rows = [
+            [float(cell) if isinstance(cell, Decimal) else cell for cell in row]
+            for row in rows
+        ]
+
+        worksheet.append_rows(cleaned_rows)
+        # worksheet.append_rows(rows)
 
     except Exception as e:
         logger.error(f"Error writing to sheet: {e}")

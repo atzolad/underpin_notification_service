@@ -225,6 +225,12 @@ def main():
 
     sheet_start_time = time.time()
 
+    print(notification_rows)
+    print("\n")
+    print(itemized_receipt_rows)
+    print("\n")
+    print(sales_list)
+
     try:
 
         write_to_sheet(sheet, 0, notification_rows)

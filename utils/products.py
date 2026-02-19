@@ -23,7 +23,7 @@ def load_product_costs(bucket, product_file=product_file):
         # download_as_bytes() returns the content, which we decode to a string
         products_string = blob.download_as_bytes().decode("utf-8")
 
-        # 3. Load and return the JSON data
+        # Load and return the JSON data
         product_data = json.loads(products_string)
         return {item["name"]: item["price"] for item in product_data}
 
