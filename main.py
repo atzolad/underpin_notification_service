@@ -448,6 +448,8 @@ def main():
 
             logger.info("Successfully connected to Postgres DB")
 
+            # TODO - move these to functions.
+
             # Need to get just the customers from daily sales...
             daily_sales_products = list(
                 set(sanitize_product_name(sale["ProductName"]) for sale in daily_sales)
@@ -513,7 +515,7 @@ def main():
 
             except Exception as e:
                 logger.error(
-                    f"Error loading customer and product info from files: {e}",
+                    f"Error loading customer and product info from db: {e}",
                     exc_info=True,
                 )
 
@@ -548,67 +550,70 @@ def main():
     #         f"Error loading customer and product info from files: {e}", exc_info=True
     #     )
 
-    # # logger.info(f"{len(daily_sales)} sales from yesterday")
+    logger.info(f"{len(daily_sales)} sales from yesterday")
 
-    # customer_sales_dict = group_sales_by_customer(
-    #     daily_sales, customer_product_dict, product_costs
-    # )
-    # logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
+    customer_sales_dict = group_sales_by_customer(
+        daily_sales, customer_product_dict, product_costs
+    )
+    logger.info(f"Grouped sales for {len(customer_sales_dict)} customers")
 
-    # if len(customer_sales_dict) == 0:
-    #     logger.error(f"Customer sales dictionary is empty")
-    #     return
+    if len(customer_sales_dict) == 0:
+        logger.error(f"Customer sales dictionary is empty")
+        return
 
-    # notification_start_time = time.time()
+    notification_start_time = time.time()
 
-    # messages, itemized_receipt_rows, sales_list = create_notifications(
-    #     bucket, customer_sales_dict
-    # )
-    # notification_rows, notification_success, notification_fail = send_notifications(
-    #     messages
-    # )
-    # logger.info(
-    #     f"Notifications sent: {notification_success} successful. {notification_fail} failed"
-    # )
-    # notification_end_time = time.time()
-    # notification_time = notification_end_time - notification_start_time
-    # logger.info(f"It took {notification_time} seconds to send notifications")
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(BUCKET_NAME)
 
-    # # Calculate the start time
-    # connect_sheet_start = time.time()
-    # try:
+    messages, itemized_receipt_rows, sales_list = create_notifications(
+        bucket, customer_sales_dict
+    )
+    notification_rows, notification_success, notification_fail = send_notifications(
+        messages
+    )
+    logger.info(
+        f"Notifications sent: {notification_success} successful. {notification_fail} failed"
+    )
+    notification_end_time = time.time()
+    notification_time = notification_end_time - notification_start_time
+    logger.info(f"It took {notification_time} seconds to send notifications")
 
-    #     sheet = connect_sheets()
+    # Calculate the start time
+    connect_sheet_start = time.time()
+    try:
 
-    # except Exception as e:
-    #     logger.error(f"Error connecting to sheets: {e}")
+        sheet = connect_sheets()
 
-    # connect_sheet_end = time.time()
-    # connect_sheet_time = connect_sheet_end - connect_sheet_start
-    # logger.info(f"It took {connect_sheet_time} seconds to connect to sheets")
+    except Exception as e:
+        logger.error(f"Error connecting to sheets: {e}")
 
-    # sheet_start_time = time.time()
+    connect_sheet_end = time.time()
+    connect_sheet_time = connect_sheet_end - connect_sheet_start
+    logger.info(f"It took {connect_sheet_time} seconds to connect to sheets")
 
-    # try:
+    sheet_start_time = time.time()
 
-    #     write_to_sheet(sheet, 0, notification_rows)
-    #     logger.info(f"Wrote to Notification Sheet")
-    #     write_to_sheet(sheet, 1, itemized_receipt_rows)
-    #     logger.info(f"Wrote to Itemized Receipt Sheet")
-    #     write_to_sheet(sheet, 2, sales_list)
-    #     logger.info(f"Wrote to Transaction Log Sheet")
+    try:
 
-    # except Exception as e:
-    #     logger.error(f"Error writing to sheets: {str(e)}")
+        write_to_sheet(sheet, 0, notification_rows)
+        logger.info(f"Wrote to Notification Sheet")
+        write_to_sheet(sheet, 1, itemized_receipt_rows)
+        logger.info(f"Wrote to Itemized Receipt Sheet")
+        write_to_sheet(sheet, 2, sales_list)
+        logger.info(f"Wrote to Transaction Log Sheet")
 
-    # sheet_end_time = time.time()
-    # sheet_write_time = sheet_end_time - sheet_start_time
-    # logger.info(f"It took {sheet_write_time} seconds to write to sheets ")
+    except Exception as e:
+        logger.error(f"Error writing to sheets: {str(e)}")
 
-    # program_end_time = time.time()
-    # program_run_time = program_end_time - program_start_time
-    # logger.info(f"It took, {program_run_time} seconds to run the whole program")
-    # logger.info(f"Program execution ended")
+    sheet_end_time = time.time()
+    sheet_write_time = sheet_end_time - sheet_start_time
+    logger.info(f"It took {sheet_write_time} seconds to write to sheets ")
+
+    program_end_time = time.time()
+    program_run_time = program_end_time - program_start_time
+    logger.info(f"It took, {program_run_time} seconds to run the whole program")
+    logger.info(f"Program execution ended")
 
 
 if __name__ == "__main__":
