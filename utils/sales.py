@@ -116,7 +116,7 @@ def group_sales_by_customer(
             logger.error(f"Product {product} from sale not found in product list")
             revenue = 0.0
         # revenue = product_costs[product] * quantity
-        transaction_dt = str(convert_gmt_pst(sale["AuthorizationDateTimeGMT"]))
+        transaction_dt = str(sale["MachineAuthorizationTime"])
 
         # Avoid a key error if this product isn't in the product list
         if product in customer_product_dict:
