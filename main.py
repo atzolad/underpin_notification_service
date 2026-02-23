@@ -62,21 +62,20 @@ def main():
         )
 
     # Initialize a list to store the combination of last sales from all machines.
-    all_machine_last_sales = []
+    # all_machine_last_sales = []
+    daily_sales = []
 
     # Loop through each machine in the list and add the last sales together.
     for machine_id in machine_ids:
         logger.info(f"Fetching sales for Machine ID: {machine_id}")
         try:
             machine_sales = get_last_sales(machine_id)
-            all_machine_last_sales.extend(machine_sales)
+            daily_sales.extend(get_daily_sales(machine_sales))
+            # all_machine_last_sales.extend(machine_sales)
         except Exception as e:
             logger.error(f"Error fetching sales for {machine_id}: {str(e)}")
 
-    # Go through the last sales and find all sales from yesterday. End execution if not found.
-    daily_sales = get_daily_sales(all_machine_last_sales)
-
-    # # Send a notification to main address and end program execution if no sales found.
+    # Send a notification to main address and end program execution if no sales found.
     if not daily_sales:
 
         logger.info("No sales from yesterday. Ending program execution")
