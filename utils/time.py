@@ -41,9 +41,7 @@ def get_machine_sale_date(sale_date):
         tzinfo=ZoneInfo(machine_tz)
     )
     machine_sale_date = machine_sale_dt.date()
-    print(
-        f"Yesterday: {yesterdays_date} machine_sale_dt = {machine_sale_dt} machine sale date:  {machine_sale_date}, original sale date string = {sale_date}"
-    )
+
     return machine_sale_date, yesterdays_date
 
 
