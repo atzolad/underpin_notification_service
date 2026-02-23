@@ -23,14 +23,26 @@ def load_product_costs(bucket, product_file=product_file):
         # download_as_bytes() returns the content, which we decode to a string
         products_string = blob.download_as_bytes().decode("utf-8")
 
-        # 3. Load and return the JSON data
+        # Load and return the JSON data
         product_data = json.loads(products_string)
-        return {item["name"]: item["price"] for item in product_data}
+        product_costs = dict()
+        products_set = set()
+
+        for product in product_data:
+            if product["name"] not in product_costs:
+                product_costs[product["name"]] = product["price"]
+            else:
+                logger.warning(
+                    f" Warning- {product["name"]} already in product_costs dict. There should be no duplicate products."
+                )
+            products_set.add(product["name"])
+
+        return product_costs, products_set
 
     except Exception as e:
         # Handle cases where the file doesn't exist or is empty
         logger.error(f"Error reading {product_file} from GCS: {e}")
-        return []  # Return empty list or handle the error
+        return [], {}  # Return empty list or handle the error
 
 
 def sanitize_product_name(product):

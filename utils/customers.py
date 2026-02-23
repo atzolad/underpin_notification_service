@@ -3,10 +3,17 @@ import json
 from typing import List, Tuple
 from .config import customer_file
 from google.cloud import storage
+import os
 from logger import setup_logging
 
 
 logger = setup_logging(__name__)
+try:
+    notification_address = os.environ.get("NOTIFICATION_ADDRESS")
+except Exception as e:
+    logger.warning(
+        f"Error retrieving notification address for productless customer creation: {e}"
+    )
 
 
 @dataclass(frozen=True)
@@ -34,17 +41,16 @@ def load_customers(bucket, customer_file=customer_file):
         # download_as_bytes() returns the content, which we decode to a string
         customer_string = blob.download_as_bytes().decode("utf-8")
 
-        # 3. Load and return the JSON data
         customer_data = json.loads(customer_string)
         return customer_data
 
     except Exception as e:
         # Handle cases where the file doesn't exist or is empty
         logger.error(f"Error reading {customer_file} from GCS: {e}")
-        return []  # Return empty list
+        return []
 
 
-def create_customer_list(customer_data):
+def create_customer_list(customer_data, products_set):
     """
     Loops through customers in customer_data JSON and creates a list of customer objects.
 
@@ -60,11 +66,42 @@ def create_customer_list(customer_data):
         logger.warning("No customer data provided")
         return []
 
-    customers = [
-        Customer(c["name"], c["email"], tuple(c["products"])) for c in customer_data
-    ]
+    customers = []
+    customer_owned_products = set()
+
+    for customer in customer_data:
+
+        new_customer = Customer(
+            customer["name"], customer["email"], tuple(customer["products"])
+        )
+
+        customers.append(new_customer)
+        customer_owned_products.update(customer["products"])
+
+    # customers = [
+    #     Customer(c["name"], c["email"], tuple(c["products"])) for c in customer_data
+    # ]
+
+    customerless_products = find_customerless_products(
+        products_set, customer_owned_products
+    )
+
+    if customerless_products:
+
+        # I am creating a customer to store all the products not tied to actual customers. I will send these notifications to the main address.
+        main_notification_customer = Customer(
+            "Underpin Vending- No Customer",
+            notification_address,
+            tuple(customerless_products),
+        )
+
+        customers.append(main_notification_customer)
 
     return customers
+
+
+def find_customerless_products(products_set, customer_owned_products):
+    return products_set - customer_owned_products
 
 
 def get_customer_to_product_map(customers):
@@ -76,6 +113,7 @@ def get_customer_to_product_map(customers):
 
     Returns:
         A dicionary with the format "Product": "Customer"
+        A set containing the products owned by all the customers.
     """
 
     customer_product_dict = {}

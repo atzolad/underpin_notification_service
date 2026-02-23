@@ -45,7 +45,10 @@ def main():
         customer_data = load_customers(bucket, customer_file)
         logger.info(f"Loaded customer info from {customer_file}")
 
-        customers = create_customer_list(customer_data)
+        product_costs, products_set = load_product_costs(bucket, product_file)
+        logger.info(f"Loaded product data for {len(product_costs)} products")
+
+        customers = create_customer_list(customer_data, products_set)
         logger.info(f"Created customer list of {len(customers)} customers")
 
         customer_product_dict = get_customer_to_product_map(customers)
@@ -53,16 +56,12 @@ def main():
             f"Created dictionary of product keys with customer values for {len(customer_product_dict)} products"
         )
 
-        product_costs = load_product_costs(bucket, product_file)
-        logger.info(f"Loaded product data for {len(product_costs)} products")
-
     except Exception as e:
         logger.error(
             f"Error loading customer and product info from files: {e}", exc_info=True
         )
 
     # Initialize a list to store the combination of last sales from all machines.
-    # all_machine_last_sales = []
     daily_sales = []
 
     # Loop through each machine in the list and add the last sales together.
@@ -71,7 +70,6 @@ def main():
         try:
             machine_sales = get_last_sales(machine_id)
             daily_sales.extend(get_daily_sales(machine_sales))
-            # all_machine_last_sales.extend(machine_sales)
         except Exception as e:
             logger.error(f"Error fetching sales for {machine_id}: {str(e)}")
 
