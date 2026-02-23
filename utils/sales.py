@@ -73,7 +73,7 @@ def get_daily_sales(last_sales: list):
 
         for sale in last_sales:
             sale_date = sale.get(
-                "AuthorizationDateTimeGMT", "No Authorization Date Time"
+                "MachineAuthorizationTime", "No Authorization Date Time"
             )
 
             if is_yesterday(sale_date):
