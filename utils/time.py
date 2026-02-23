@@ -21,7 +21,7 @@ def convert_gmt_pst(gmt_datetime: str, machine_tz: str = machine_tz) -> datetime
     """
 
     gmt_dt = datetime.fromisoformat(gmt_datetime.replace("Z", "+00:00"))
-    # 2. If it has no timezone info, explicitly tell Python it is UTC
+    # If it has no timezone info, explicitly tell Python it is UTC
     if gmt_dt.tzinfo is None:
         dt = dt.replace(tzinfo=ZoneInfo("UTC"))
 
