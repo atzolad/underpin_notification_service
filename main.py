@@ -32,20 +32,25 @@ def main():
     BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
 
     # Initialize a list to store the combination of last sales from all machines.
-    all_machine_last_sales = []
+    # all_machine_last_sales = []
+    daily_sales = []
 
     # Loop through each machine in the list and add the last sales together.
     for machine_id in machine_ids:
         logger.info(f"Fetching sales for Machine ID: {machine_id}")
         try:
             machine_sales = get_last_sales(machine_id)
-            all_machine_last_sales.extend(machine_sales)
+            daily_sales.extend(get_daily_sales(machine_sales))
+            # print(f"machine_sales: \n {machine_sales}")
+            # all_machine_last_sales.extend(machine_sales)
+            # print(f"all_machine_last_sales: \n {all_machine_last_sales}")
         except Exception as e:
             logger.error(f"Error fetching sales for {machine_id}: {str(e)}")
 
     # Go through the last sales and find all sales from yesterday. End execution if not found.
+    for sale in daily_sales:
 
-    daily_sales = get_daily_sales(all_machine_last_sales)
+        print(f"daily sale: \n {sale}")
 
     # Send a notification to main address and end program execution if no sales found.
     if not daily_sales:
@@ -81,6 +86,8 @@ def main():
         logger.warning(f"Error connecting to Postgres DB: {e}")
 
     logger.info(f"{len(daily_sales)} sales from yesterday")
+    print(f"Customer_product dict:  \n {customer_product_dict} \n")
+    print(f"Product list: \n {product_costs}")
 
     customer_sales_dict = group_sales_by_customer(
         daily_sales, customer_product_dict, product_costs

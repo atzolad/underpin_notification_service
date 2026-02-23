@@ -72,8 +72,9 @@ def get_daily_sales(last_sales: list):
     if isinstance(last_sales, list):
 
         for sale in last_sales:
+            print(f"Sale: {sale}")
             sale_date = sale.get(
-                "AuthorizationDateTimeGMT", "No Authorization Date Time"
+                "MachineAuthorizationTime", "No Authorization Date Time"
             )
 
             if is_yesterday(sale_date):
@@ -116,7 +117,7 @@ def group_sales_by_customer(
             logger.error(f"Product {product} from sale not found in product list")
             revenue = 0.0
         # revenue = product_costs[product] * quantity
-        transaction_dt = str(convert_gmt_pst(sale["AuthorizationDateTimeGMT"]))
+        transaction_dt = str(sale["MachineAuthorizationTime"])
 
         # Avoid a key error if this product isn't in the product list
         if product in customer_product_dict:

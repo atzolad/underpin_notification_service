@@ -19,21 +19,31 @@ def convert_gmt_pst(gmt_datetime: str, machine_tz: str = machine_tz) -> datetime
     A datetime string converted the machine's local timezone
 
     """
+
     gmt_dt = datetime.fromisoformat(gmt_datetime.replace("Z", "+00:00"))
+    # 2. If it has no timezone info, explicitly tell Python it is UTC
+    if gmt_dt.tzinfo is None:
+        dt = dt.replace(tzinfo=ZoneInfo("UTC"))
+
     machine_dt = gmt_dt.astimezone(ZoneInfo(machine_tz))
+    print(f"Convert: {gmt_datetime} output: {machine_dt}")
     return machine_dt
 
 
 def get_machine_sale_date(sale_date):
     local_now = datetime.now(ZoneInfo(machine_tz))
     todays_date = local_now.date()
-
     yesterdays_date = todays_date - timedelta(days=1)
     # May need this if the API actually returns the local time and not the GMT time- according to docs it is GMT.
     # date_datetime = datetime.fromisoformat(sale_date.replace("Z", "+00:00"))
     # dt_sale_date = date_datetime.date()
-    machine_sale_dt = convert_gmt_pst(sale_date)
+    machine_sale_dt = datetime.fromisoformat(sale_date).replace(
+        tzinfo=ZoneInfo(machine_tz)
+    )
     machine_sale_date = machine_sale_dt.date()
+    print(
+        f"Yesterday: {yesterdays_date} machine_sale_dt = {machine_sale_dt} machine sale date:  {machine_sale_date}, original sale date string = {sale_date}"
+    )
     return machine_sale_date, yesterdays_date
 
 
