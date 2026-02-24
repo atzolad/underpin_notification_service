@@ -5,6 +5,7 @@ from .config import customer_file
 from google.cloud import storage
 from logger import setup_logging
 from utils.products import sanitize_product_name
+import os
 
 
 logger = setup_logging(__name__)
@@ -127,6 +128,8 @@ def get_customers_products(daily_sales, conn) -> tuple[dict, dict]:
         set(sanitize_product_name(sale["ProductName"]) for sale in daily_sales)
     )
     print(daily_sales_products)
+
+    notification_address = os.environ.get("NOTIFICATION_ADDRESS")
     customer_product_dict = {}
     product_costs = {}
 
@@ -138,7 +141,7 @@ def get_customers_products(daily_sales, conn) -> tuple[dict, dict]:
                     SELECT c.name, c.email, p.name, p.price
                     FROM customers AS c
                     JOIN customer_products AS cp on c.id = cp.customer_id
-                    JOIN products AS p ON cp.product_id = p.id
+                    RIGHT JOIN products AS p ON cp.product_id = p.id
                     WHERE p.name = ANY(%s)
 
                     """,
@@ -153,20 +156,28 @@ def get_customers_products(daily_sales, conn) -> tuple[dict, dict]:
                 product = customer[2]
                 product_cost = customer[3]
 
-                if product not in customer_product_dict:
-                    customer_product_dict[product] = Customer(
-                        name=name, email=email, products=(product,)
-                    )
-                else:
-                    logger.warning(
-                        f"Product {product} already in customer_product_dict"
-                    )
-
                 if product not in product_costs:
                     product_costs[product] = product_cost
 
                 else:
                     logger.warning(f"Product {product} already in product_costs")
+
+                if name:
+
+                    if product not in customer_product_dict:
+                        customer_product_dict[product] = Customer(
+                            name=name, email=email, products=(product,)
+                        )
+                    else:
+                        logger.warning(
+                            f"Product {product} already in customer_product_dict"
+                        )
+                else:
+                    customer_product_dict[product] = Customer(
+                        name="Underpin Vending- No Customer",
+                        email=notification_address,
+                        products=(product,),
+                    )
 
         return customer_product_dict, product_costs
 
