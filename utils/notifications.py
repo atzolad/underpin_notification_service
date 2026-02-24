@@ -115,7 +115,8 @@ def create_notifications(bucket, customer_sales_dict: dict):
         total_revenue_msg = et["total_revenue"]
 
         recipients = [notification_address]
-        recipients.append(customer.email)
+        if customer.email != notification_address:
+            recipients.append(customer.email)
 
         total_revenue = 0
 
@@ -315,9 +316,14 @@ def send_notifications(messages: list):
             for message in messages:
                 try:
                     server.send_message(message.message)
-                    logger.info(
-                        f"Email sent successfully to  {message.customer.name} at {message.customer.email} and {notification_address} "
-                    )
+                    if message.customer.email == notification_address:
+                        logger.info(
+                            f"Email sent successfully to {message.customer.name} at {notification_address}"
+                        )
+                    else:
+                        logger.info(
+                            f"Email sent successfully to  {message.customer.name} at {message.customer.email} and {notification_address} "
+                        )
                     successfully_sent += 1
                     notification_status = "sent"
                     notification_rows = add_notification_row(
