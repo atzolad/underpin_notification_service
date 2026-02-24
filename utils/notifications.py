@@ -41,7 +41,7 @@ def load_email_template(bucket, email_template):
         # download_as_bytes() returns the content, which we decode to a string
         email_template_string = blob.download_as_bytes().decode("utf-8")
 
-        # 3. Load and return the JSON data
+        # Load and return the JSON data
         data = json.loads(email_template_string)
         return data
 
