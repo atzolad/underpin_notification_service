@@ -13,7 +13,6 @@ from utils.notifications import (
 from utils.config import (
     customer_file,
     product_file,
-    machine_ids,
 )
 from utils.sheets import connect_sheets, write_to_sheet
 import time
@@ -64,6 +63,9 @@ def main():
 
     # Initialize a list to store the combination of last sales from all machines.
     daily_sales = []
+
+    machine_ids_raw = os.environ.get("MACHINE_IDS", "567219276,791321280")
+    machine_ids = [mid.strip() for mid in machine_ids_raw.split(",") if mid.strip()]
 
     # Loop through each machine in the list and add the last sales together.
     for machine_id in machine_ids:

@@ -6,7 +6,7 @@ logger = setup_logging(__name__)
 
 load_dotenv()
 
-NAYAX_API_KEY = os.environ.get("NAYAX_API_KEY", "default")
+NAYAX_API_KEY = os.environ.get("NAYAX_API_KEY")
 
 if not NAYAX_API_KEY:
     logger.error(f"Missing Nayax API key.")
@@ -38,3 +38,8 @@ if not sender_email or not sender_pw:
 
 # Notification parameters
 notification_address = os.environ.get("NOTIFICATION_ADDRESS")
+if not notification_address:
+    logger.error("Missing notification address. Please set NOTIFICATION_ADDRESS")
+    raise EnvironmentError(
+        "Missing notification address. Please set NOTIFICATION_ADDRESS."
+    )
