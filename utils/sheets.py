@@ -12,13 +12,12 @@ SCOPES = [
 
 
 # The ID and range of a sample spreadsheet.
-try:
-    GOOGLE_SHEETS_ID = os.getenv("GOOGLE_SHEETS_ID")
-    GOOGLE_SHEETS_NAME = os.getenv("GOOGLE_SHEETS_NAME")
-    GOOGLE_SHEETS_ID = os.getenv("GOOGLE_SHEETS_ID")
 
-except Exception as e:
-    logger.error(f"error retrieving google sheet ID or Name: {e}")
+GOOGLE_SHEETS_ID = os.getenv("GOOGLE_SHEETS_ID")
+GOOGLE_SHEETS_NAME = os.getenv("GOOGLE_SHEETS_NAME")
+
+if not GOOGLE_SHEETS_ID:
+    logger.warning("GOOGLE_SHEETS_ID is not set. Sheet operations will fail.")
 
 
 def connect_sheets():
@@ -31,7 +30,7 @@ def connect_sheets():
         "https://www.googleapis.com/auth/drive",
     ]
 
-    # Authenticate
+    sheet = None
 
     try:
 
@@ -40,6 +39,7 @@ def connect_sheets():
 
     except Exception as e:
         logger.error(f"Error opening google sheet {GOOGLE_SHEETS_NAME}: {str(e)}")
+        raise
 
     return sheet
 
