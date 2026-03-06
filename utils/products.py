@@ -29,20 +29,27 @@ def load_product_costs(bucket, product_file=product_file):
         products_set = set()
 
         for product in product_data:
-            if product["name"] not in product_costs:
-                product_costs[product["name"]] = product["price"]
+
+            product_name = product.get("name")
+            product_price = product.get("price")
+            if not product_name or product_price is None:
+                logger.warning(f"Skipping malformed product record: {product}")
+                continue
+
+            if product_name not in product_costs:
+                product_costs[product_name] = product_price
             else:
                 logger.warning(
-                    f" Warning- {product["name"]} already in product_costs dict. There should be no duplicate products."
+                    f" Warning- {product_name} already in product_costs dict. There should be no duplicate products."
                 )
-            products_set.add(product["name"])
+            products_set.add(product_name)
 
         return product_costs, products_set
 
     except Exception as e:
         # Handle cases where the file doesn't exist or is empty
         logger.error(f"Error reading {product_file} from GCS: {e}")
-        return [], {}  # Return empty list or handle the error
+        return {}, set()  # Return empty list or handle the error
 
 
 def sanitize_product_name(product):
