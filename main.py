@@ -15,8 +15,8 @@ import time
 from logger import setup_logging
 import os
 from google.cloud import storage
-import pprint
 import psycopg
+import sys
 
 
 def main():
@@ -40,6 +40,8 @@ def main():
         logger.info(f"Fetching sales for Machine ID: {machine_id}")
         try:
             machine_sales = get_last_sales(machine_id)
+            if machine_sales is None:
+                logger.warning(f"No sales data returned for machine {machine_id}")
             daily_sales.extend(get_daily_sales(machine_sales))
             # print(f"machine_sales: \n {machine_sales}")
             # all_machine_last_sales.extend(machine_sales)
@@ -84,6 +86,7 @@ def main():
 
     except Exception as e:
         logger.warning(f"Error connecting to Postgres DB: {e}")
+        sys.exit(1)
 
     logger.info(f"{len(daily_sales)} sales from yesterday")
     print(f"Customer_product dict:  \n {customer_product_dict} \n")
