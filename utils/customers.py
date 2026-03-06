@@ -8,11 +8,11 @@ from logger import setup_logging
 
 
 logger = setup_logging(__name__)
-try:
-    notification_address = os.environ.get("NOTIFICATION_ADDRESS")
-except Exception as e:
+
+notification_address = os.environ.get("NOTIFICATION_ADDRESS")
+if not notification_address:
     logger.warning(
-        f"Error retrieving notification address for productless customer creation: {e}"
+        "NOTIFICATION_ADDRESS env var is not set. Productless customer notifications will fail."
     )
 
 
@@ -71,9 +71,17 @@ def create_customer_list(customer_data, products_set):
 
     for customer in customer_data:
 
-        new_customer = Customer(
-            customer["name"], customer["email"], tuple(customer["products"])
-        )
+        name = customer.get("name")
+        email = customer.get("email")
+        products = customer.get("products", [])
+
+        if not name or not email:
+            logger.warning(
+                f"Skipping malformed customer record (missing name or email): {customer}"
+            )
+            continue
+
+        new_customer = Customer(name, email, tuple(products))
 
         customers.append(new_customer)
         customer_owned_products.update(customer["products"])
