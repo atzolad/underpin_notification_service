@@ -4,6 +4,11 @@ from logger import setup_logging
 from utils.customers import load_customers
 from utils.products import sanitize_product_name
 import requests
+import time
+
+MAX_RETRIES = 3
+RETRY_BACKOFF_SECONDS = 2
+
 
 # For testing:
 from google.cloud import storage
@@ -30,32 +35,45 @@ def get_last_sales(machine_id):
     """
 
     url = f"https://lynx.nayax.com/operational/v1/machines/{machine_id}/lastSales"
-    headers = {"Authorization": f"Bearer {NAYAX_API_KEY}", "accept": "application/js"}
+    headers = {"Authorization": f"Bearer {NAYAX_API_KEY}", "accept": "application/json"}
 
     # Use an environment variable to define the bucket name for Google Cloud Storage
-    BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
+    # BUCKET_NAME = os.environ.get("CONFIG_BUCKET")
     # Initialize the storage client and bucket for Google Cloud
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(BUCKET_NAME)
+    # storage_client = storage.Client()
+    # bucket = storage_client.bucket(BUCKET_NAME)
 
     # # For testing without API connection
     # mock_last_sales_response = load_customers(bucket, "last_sales.json")
     # return mock_last_sales_response
 
-    try:
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
 
-        response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                last_sales = response.json()
+                logger.info(
+                    f"Successfully connected to LYNX API for machine {machine_id}"
+                )
+                return last_sales
+            else:
+                logger.error(
+                    f"API error for machine {machine_id}: HTTP {response.status_code} (attempt {attempt}/{MAX_RETRIES})"
+                )
 
-        if response.status_code == 200:
-            last_sales = response.json()
-            logger.info(f"Succesfully connected to LYNX API")
-            return last_sales
-        else:
-            logger.error(f"Error: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            logger.error(
+                f"HTTP request error for machine {machine_id}: {e} (attempt {attempt}/{MAX_RETRIES})"
+            )
 
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Error in HTTP request: {e}")
-        return None
+        if attempt < MAX_RETRIES:
+            sleep_time = RETRY_BACKOFF_SECONDS * attempt
+            logger.info(f"Retrying in {sleep_time}s...")
+            time.sleep(sleep_time)
+
+    logger.error(f"All {MAX_RETRIES} attempts failed for machine {machine_id}")
+    return []
 
 
 def get_daily_sales(last_sales: list):
@@ -69,21 +87,24 @@ def get_daily_sales(last_sales: list):
     """
     daily_sales = []
 
-    if isinstance(last_sales, list):
+    if last_sales is None:
+        logger.warning(
+            "last_sales is None -- API call likely failed. Returning empty daily sales."
+        )
+        return daily_sales
 
-        for sale in last_sales:
-            sale_date = sale.get(
-                "MachineAuthorizationTime", "No Authorization Date Time"
-            )
-
-            if is_yesterday(sale_date):
-                daily_sales.append(sale)
-
-            elif is_before_yesterday(sale_date):
-                break
-
-    else:
+    if not isinstance(last_sales, list):
         logger.warning(f"Unexpected Data Format: {type(last_sales)}")
+        return daily_sales
+
+    for sale in last_sales:
+        sale_date = sale.get("MachineAuthorizationTime", "No Authorization Date Time")
+
+        if is_yesterday(sale_date):
+            daily_sales.append(sale)
+
+        elif is_before_yesterday(sale_date):
+            break
 
     return daily_sales
 
