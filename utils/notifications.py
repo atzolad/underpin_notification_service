@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 from .config import machine_tz
 from utils.time import get_yesterdays_date
 import json
+import html
 
 logger = setup_logging(__name__)
 
@@ -244,9 +245,10 @@ def create_notifications(bucket, customer_sales_dict: dict):
                 f"{product} ({combined_product_quantities[product][0]}x)"
             )
 
+            safe_product = html.escape(product)
             html_body += f"""
             <tr>
-              <td>{product}</td>
+              <td>{safe_product}</td>
               <td>{combined_product_quantities[product][0]}</td>
               <td>${combined_product_quantities[product][1]:.2f}</td>
             </tr>
@@ -342,7 +344,7 @@ def send_notifications(messages: list):
 
     except Exception as e:
         logger.error(f"Failed to connect to gmail service: {e}")
-        return f"Failed to connect to gmail service: {e}"
+        return notification_rows, successfully_sent, failed_sends
 
     return notification_rows, successfully_sent, failed_sends
 
