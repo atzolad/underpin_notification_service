@@ -20,7 +20,7 @@ import time
 from logger import setup_logging
 import os
 from google.cloud import storage
-import pprint
+import sys
 
 
 def main():
@@ -60,6 +60,7 @@ def main():
         logger.error(
             f"Error loading customer and product info from files: {e}", exc_info=True
         )
+        sys.exit(1)
 
     # Initialize a list to store the combination of last sales from all machines.
     daily_sales = []
@@ -69,6 +70,9 @@ def main():
         logger.info(f"Fetching sales for Machine ID: {machine_id}")
         try:
             machine_sales = get_last_sales(machine_id)
+            if machine_sales is None:
+                logger.warning(f"No sales data returned for machine {machine_id}")
+                continue
             daily_sales.extend(get_daily_sales(machine_sales))
         except Exception as e:
             logger.error(f"Error fetching sales for {machine_id}: {str(e)}")
