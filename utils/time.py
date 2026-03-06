@@ -1,6 +1,9 @@
 from datetime import datetime, date, timedelta
 from zoneinfo import ZoneInfo
 from .config import machine_tz
+from logger import setup_logging
+
+logger = setup_logging(__name__)
 
 
 def convert_gmt_pst(gmt_datetime: str, machine_tz: str = machine_tz) -> datetime:
@@ -23,10 +26,10 @@ def convert_gmt_pst(gmt_datetime: str, machine_tz: str = machine_tz) -> datetime
     gmt_dt = datetime.fromisoformat(gmt_datetime.replace("Z", "+00:00"))
     # If it has no timezone info, explicitly tell Python it is UTC
     if gmt_dt.tzinfo is None:
-        dt = dt.replace(tzinfo=ZoneInfo("UTC"))
+        gmt_dt = gmt_dt.replace(tzinfo=ZoneInfo("UTC"))
 
     machine_dt = gmt_dt.astimezone(ZoneInfo(machine_tz))
-    print(f"Convert: {gmt_datetime} output: {machine_dt}")
+    logger.debug(f"Convert: {gmt_datetime} output: {machine_dt}")
     return machine_dt
 
 
@@ -61,10 +64,7 @@ def is_yesterday(sale_date):
 
     machine_sale_date, yesterdays_date = get_machine_sale_date(sale_date)
 
-    if machine_sale_date == yesterdays_date:
-        return True
-    else:
-        return False
+    return machine_sale_date == yesterdays_date
 
 
 def is_before_yesterday(sale_date):
@@ -82,10 +82,7 @@ def is_before_yesterday(sale_date):
 
     machine_sale_date, yesterdays_date = get_machine_sale_date(sale_date)
 
-    if machine_sale_date < yesterdays_date:
-        return True
-    else:
-        return False
+    return machine_sale_date < yesterdays_date
 
 
 def get_yesterdays_date():
