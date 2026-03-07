@@ -13,11 +13,8 @@ if not NAYAX_API_KEY:
     raise EnvironmentError("Missing Nayax API key. Please set NAYAX_API_KEY")
 
 # machine_ids = ["567219276", "791321280"]
-machine_id_str = os.environ.get("MACHINE_IDS")
-if machine_id_str:
-    machine_ids = machine_id_str.split(",")
-else:
-    logger.error(f"Missing Machine IDs environmental var")
+machine_ids_raw = os.environ.get("MACHINE_IDS", "567219276,791321280")
+machine_ids = [mid.strip() for mid in machine_ids_raw.split(",") if mid.strip()]
 
 # The JSON file storing customer data
 customer_file = "customers.json"
@@ -45,3 +42,8 @@ if not sender_email or not sender_pw:
 
 # Notification parameters
 notification_address = os.environ.get("NOTIFICATION_ADDRESS")
+if not notification_address:
+    logger.error("Missing notification address. Please set NOTIFICATION_ADDRESS")
+    raise EnvironmentError(
+        "Missing notification address. Please set NOTIFICATION_ADDRESS."
+    )
