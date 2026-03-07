@@ -92,9 +92,23 @@ def create_customer_list(customer_data):
         logger.warning("No customer data provided")
         return []
 
-    customers = [
-        Customer(c["name"], c["email"], tuple(c["products"])) for c in customer_data
-    ]
+    customers = []
+
+    for customer in customer_data:
+
+        name = customer.get("name")
+        email = customer.get("email")
+        products = customer.get("products", [])
+
+        if not name or not email:
+            logger.warning(
+                f"Skipping malformed customer record (missing name or email): {customer}"
+            )
+            continue
+
+        new_customer = Customer(name, email, tuple(products))
+
+        customers.append(new_customer)
 
     return customers
 
