@@ -125,36 +125,36 @@ def main():
     notification_time = notification_end_time - notification_start_time
     logger.info(f"It took {notification_time} seconds to send notifications")
 
-    # Calculate the start time
-    connect_sheet_start = time.time()
-    try:
+    # # Calculate the start time
+    # connect_sheet_start = time.time()
+    # try:
 
-        sheet = connect_sheets()
+    #     sheet = connect_sheets()
 
-    except Exception as e:
-        logger.error(f"Error connecting to sheets: {e}")
+    # except Exception as e:
+    #     logger.error(f"Error connecting to sheets: {e}")
 
-    connect_sheet_end = time.time()
-    connect_sheet_time = connect_sheet_end - connect_sheet_start
-    logger.info(f"It took {connect_sheet_time} seconds to connect to sheets")
+    # connect_sheet_end = time.time()
+    # connect_sheet_time = connect_sheet_end - connect_sheet_start
+    # logger.info(f"It took {connect_sheet_time} seconds to connect to sheets")
 
-    sheet_start_time = time.time()
+    # sheet_start_time = time.time()
 
-    try:
+    # try:
 
-        write_to_sheet(sheet, 0, notification_rows)
-        logger.info(f"Wrote to Notification Sheet")
-        write_to_sheet(sheet, 1, itemized_receipt_rows)
-        logger.info(f"Wrote to Itemized Receipt Sheet")
-        write_to_sheet(sheet, 2, sales_list)
-        logger.info(f"Wrote to Transaction Log Sheet")
+    #     write_to_sheet(sheet, 0, notification_rows)
+    #     logger.info(f"Wrote to Notification Sheet")
+    #     write_to_sheet(sheet, 1, itemized_receipt_rows)
+    #     logger.info(f"Wrote to Itemized Receipt Sheet")
+    #     write_to_sheet(sheet, 2, sales_list)
+    #     logger.info(f"Wrote to Transaction Log Sheet")
 
-    except Exception as e:
-        logger.error(f"Error writing to sheets: {str(e)}")
+    # except Exception as e:
+    #     logger.error(f"Error writing to sheets: {str(e)}")
 
-    sheet_end_time = time.time()
-    sheet_write_time = sheet_end_time - sheet_start_time
-    logger.info(f"It took {sheet_write_time} seconds to write to sheets ")
+    # sheet_end_time = time.time()
+    # sheet_write_time = sheet_end_time - sheet_start_time
+    # logger.info(f"It took {sheet_write_time} seconds to write to sheets ")
 
     program_end_time = time.time()
     program_run_time = program_end_time - program_start_time

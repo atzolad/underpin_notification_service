@@ -125,8 +125,14 @@ def group_sales_by_customer(
     customer_sales_dict = {}
 
     for sale in daily_sales:
-        product = sanitize_product_name(sale["ProductName"])
-        settlement_value = sale["SettlementValue"]
+        if productName := sale.get("ProductName"):
+            product = sanitize_product_name(productName)
+            settlement_value = sale.get("SettlementValue")
+        else:
+            txId = sale.get("TransactionID")
+            logger.error(f"Error from API: Transaction ID: {txId} has no product name")
+            continue
+
         # API response seems to return everything with a quantity of 0 so I am making this 1 for now.
         # quantity = sale["Quantity"]
         quantity = 1
